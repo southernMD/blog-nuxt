@@ -4,7 +4,7 @@
         <Head>
             <Link rel="stylesheet" href="//at.alicdn.com/t/c/font_3736505_bbzb36dxh2s.css">
             </Link>
-            <Link rel="icon" href="_nuxt/assets/favicon.ico">
+            <Link rel="icon" href="/favicon.ico">
             </Link>
         </Head>
         <div class="title">
@@ -23,7 +23,7 @@
                 <div class="menu" @click="showDrawer">
                     <i class="iconfont icon-caidan"></i>
                 </div>
-                <el-drawer v-model="drawerFlag" title="I am the title" :show-close="false" :with-header="false">
+                <el-drawer v-model="drawerFlag" title="I am the title" :append-to-body="true" :show-close="false" :with-header="false">
                     <div id="nav-list-phone">
                         <div class="nav" v-for="val in navArr" :key="val" @click="go(val)">
                             <span>{{ val }}</span>
@@ -39,12 +39,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
-import { ElSwitch, ElDrawer } from 'element-plus'
+import { ElSwitch, ElDrawer,ElButton } from 'element-plus'
 import { useApp } from '@/stores/index'
 const $router = useRouter()
 const AppPinia = useApp()
 const navArr = ['首页', '文章', '实验室', '平成十年']
 let value1 = ref(true)
+
 let drawerFlag = ref(true)
 const go = (path: string) => {
     $router.push({
