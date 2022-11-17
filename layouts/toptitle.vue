@@ -23,13 +23,13 @@
                 <div class="menu" @click="showDrawer">
                     <i class="iconfont icon-caidan"></i>
                 </div>
-                <ElDrawer v-model="drawerFlag" :show-close="false" :with-header="false">
+                <el-drawer v-model="drawerFlag" title="I am the title" :show-close="false" :with-header="false">
                     <div id="nav-list-phone">
                         <div class="nav" v-for="val in navArr" :key="val" @click="go(val)">
                             <span>{{ val }}</span>
                         </div>
                     </div>
-                </ElDrawer>
+                </el-drawer>
             </div>
         </div>
         <slot></slot>
@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
-import { ElSwitch,ElDrawer } from 'element-plus'
+import { ElSwitch, ElDrawer } from 'element-plus'
 import { useApp } from '@/stores/index'
 const $router = useRouter()
 const AppPinia = useApp()
@@ -51,27 +51,28 @@ const go = (path: string) => {
 
     })
 }
-let windowWidth = toRef(AppPinia,'windowWidth')
-const getWindowWidth = ()=>{
+let windowWidth = toRef(AppPinia, 'windowWidth')
+const getWindowWidth = () => {
     windowWidth.value = document.documentElement.clientWidth
     console.log(windowWidth.value);
 }
 
-onMounted(()=>{
+onMounted(() => {
     getWindowWidth()
-    window.addEventListener('resize',getWindowWidth)
+    window.addEventListener('resize', getWindowWidth)
 })
 
-watch(windowWidth,()=>{
-    if(windowWidth.value >= 512){
+watch(windowWidth, () => {
+    if (windowWidth.value >= 512) {
         drawerFlag.value = false
     }
 })
 
 const showDrawer = () => {
     console.log('123');
-    
-    drawerFlag.value = !drawerFlag.value
+
+    drawerFlag.value = true
+    console.log(drawerFlag.value);
 }
 </script>
 
@@ -158,6 +159,7 @@ const showDrawer = () => {
                 height: 20px;
                 display: none;
                 cursor: pointer;
+
                 >i {
                     font-size: 20px;
                     color: white;
