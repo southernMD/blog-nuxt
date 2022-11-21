@@ -6,6 +6,10 @@
             </Link>
             <Link rel="icon" href="/favicon.ico">
             </Link>
+            <Meta name="author" content="southernMD"></Meta>
+            <Meta name="keywords" content="十年生死 南山有壶酒 未定义人生 南山有壶酒的blog"></Meta>
+            <Meta name="viewport" content="width=device-width,initial-scale=1"></Meta>
+            <Meta name="description" content="欢迎来到我的世界"></Meta>
         </Head>
         <div class="title">
             <div class="title-main">
@@ -23,8 +27,8 @@
                 <div class="menu" @click="showDrawer">
                     <i class="iconfont icon-caidan"></i>
                 </div>
-                <el-drawer v-model="drawerFlag" title="I am the title" :append-to-body="true" :show-close="false" :with-header="false">
-                    <div id="nav-list-phone">
+                <el-drawer v-model="drawerFlag" :append-to-body="true" :show-close="false" :with-header="false">
+                    <div class="nav-list-phone">
                         <div class="nav" v-for="val in navArr" :key="val" @click="go(val)">
                             <span>{{ val }}</span>
                         </div>
@@ -181,6 +185,22 @@ const showDrawer = () => {
             .title-main {
                 width: 100%;
             }
+        }
+    }
+}
+
+.nav-list-phone{
+    .nav{
+        display: flex;
+        align-items: center;
+        height: 40px;
+        user-select: none;
+        cursor: pointer;
+        >span{
+            padding-left: 20px;
+        }
+        &:hover{
+            background-color: red;
         }
     }
 }

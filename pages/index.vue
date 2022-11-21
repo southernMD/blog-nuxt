@@ -13,6 +13,12 @@
 
 </script>
 
-<style>
-
+<style lang="less">
+    .el-drawer__body {
+        padding: 0 !important;
+        background-color: @background-color;
+    }
+    body{
+        background-color: @background-color;
+    }
 </style>
