@@ -13,7 +13,8 @@
                     <span>southernMD&nbsp;南山有壶酒</span>
                 </div>
                 <div class="nav-list">
-                    <div class="nav" v-for="(val,index) in navArr" :key="val" @click="go(val)" :class="{ active: val == '首页' }">
+                    <div class="nav" v-for="(val, index) in navArr" :key="val" @click="go(val)"
+                        :class="{ active: val == '首页' }">
                         <i class="iconfont" :class="navicons[index]"></i>
                         <span>{{ val }}</span>
                     </div>
@@ -23,7 +24,7 @@
                 </div>
                 <el-drawer v-model="drawerFlag" :append-to-body="true" :show-close="false" :with-header="false">
                     <div class="nav-list-phone">
-                        <div class="nav" v-for="(val,index) in navArr" :key="val" @click="go(val)"
+                        <div class="nav" v-for="(val, index) in navArr" :key="val" @click="go(val)"
                             :class="{ active: val == '首页' }">
                             <span><i class="iconfont" :class="navicons[index]"></i>{{ val }}</span>
                         </div>
@@ -32,10 +33,21 @@
             </div>
         </div>
         <slot></slot>
-        <div class="float-option">
-            <div class="one"></div>
-            <div class="two"></div>
-            <div class="three"></div>
+        <div class="float-option" :class="{'float-option-l':optionDirectionFlag,'float-option-active':optionActiveFlag}">
+            <Block :height="'30px'" class="change-direction" @click="handleChangeDirection" :class="{'hide':optionActiveFlag}" :orderChange="orderChange">
+                <template #icon>
+                    <el-icon>
+                        <ArrowLeftBold v-if="!optionDirectionFlag"  />
+                        <ArrowRightBold v-else />
+                    </el-icon>
+                </template>
+                <template #message>
+                    <div class="message">{{!optionDirectionFlag?'移至左侧':'移至右侧'}}</div>
+                </template>
+            </Block>
+            <Block class="one" :orderChange="orderChange"></Block>
+            <Block class="skin" @click="handleChangeSkin" :orderChange="orderChange"></Block>
+            <Block class="three" :orderChange="orderChange"></Block>
         </div>
     </div>
 </template>
@@ -43,13 +55,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
-import { ElDrawer, ElButton } from 'element-plus'
+import { ElDrawer, ElButton,ElIcon } from 'element-plus'
+import {ArrowLeftBold,ArrowRightBold} from '@element-plus/icons-vue'
 import { useApp } from '@/stores/index'
 const $router = useRouter()
 const AppPinia = useApp()
-const navArr = ['首页', '文章', '留言版', '实验室', '十年','关于'];
-const navicons = ['icon-shouye','icon-wenzhang','icon-liuyan','icon-flask','icon-zhiwu','icon-guanyu']
-
+const navArr = ['首页', '文章', '留言版', '实验室', '十年', '关于'];
+const navicons = ['icon-shouye', 'icon-wenzhang', 'icon-liuyan', 'icon-flask', 'icon-zhiwu', 'icon-guanyu']
+let theme = toRef(AppPinia,'theme')
 let drawerFlag = ref(false)
 const go = (path: string) => {
     $router.push({
@@ -75,13 +88,45 @@ watch(windowWidth, () => {
 
 const showDrawer = () => {
     console.log('123');
-
     drawerFlag.value = true
     console.log(drawerFlag.value);
 }
+
+let optionDirectionFlag = ref(false)
+let optionActiveFlag = ref(false)
+let orderChange = ref(false)
+const handleChangeDirection = ()=>{
+    optionActiveFlag.value = true
+    let time2 = setTimeout(()=>{
+        orderChange.value = !orderChange.value
+        clearTimeout(time2)
+    },200)
+    let time = setTimeout(()=>{
+        optionDirectionFlag.value = !optionDirectionFlag.value
+        clearTimeout(time)
+        optionActiveFlag.value = false
+    },300)
+}
+
+onMounted(()=>{
+    skin(theme.value);
+})
+
+const handleChangeSkin = ()=>{
+    if(theme.value == 'light'){
+        theme.value = 'dark'
+    }else{
+        theme.value = 'light'
+    }
+    skin(theme.value);
+}
+
 </script>
 
 <style scoped lang="less">
+.hide{
+    display: none !important;
+}
 .maintemplate {
     .title {
         width: 100vw;
@@ -105,6 +150,7 @@ const showDrawer = () => {
                 align-items: center;
                 padding-left: 10px;
                 cursor: pointer;
+
                 >span {
                     color: white;
                     font-size: 14px;
@@ -120,32 +166,38 @@ const showDrawer = () => {
                     width: 80px;
                     height: 30px;
                     margin-left: 10px;
-                    border-radius: .4em;
+                    border-radius: @border-ra;
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     cursor: pointer;
                     user-select: none;
 
-                    >span,i{
+                    >span,
+                    i {
                         font-size: 16px;
                         color: white;
                     }
-                    i{
+
+                    i {
                         margin-right: 4px;
                     }
+
                     &:hover {
                         background: white;
 
-                        >span,i{
+                        >span,
+                        i {
                             color: @title-color;
                         }
                     }
                 }
-                .active {
-                    background: white ;
 
-                    >span,i{
+                .active {
+                    background: white;
+
+                    >span,
+                    i {
                         color: @title-color ;
                     }
                 }
@@ -198,6 +250,32 @@ const showDrawer = () => {
             }
         }
     }
+
+    .float-option {
+        position: fixed;
+        z-index: 999;
+        bottom: 30px;
+        right: 30px;
+        width: 130px;
+        transition: opacity .2s linear;
+        >.change-direction{
+            height: 30px;
+            opacity: 0;
+            transition: all .2s linear;
+            transform: translateY(10px);
+        }
+        &:hover .change-direction{
+            opacity: 1;
+            transform: translateY(0px);
+        }
+    }
+    .float-option-active{
+        opacity: 0;
+    }
+    .float-option-l{
+        bottom: 30px;
+        left: 30px;
+    }
 }
 
 .nav-list-phone {
@@ -216,7 +294,8 @@ const showDrawer = () => {
             z-index: 2;
             position: relative;
             cursor: pointer;
-            i{
+            color: @font-color;
+            i {
                 margin-right: 5px;
             }
         }
@@ -230,13 +309,13 @@ const showDrawer = () => {
             cursor: pointer;
             width: 90%;
             height: 80%;
-            background-color: rgba(255, 255, 255, .5);
+            background-color: @background-btn;
             position: absolute;
             left: 0;
             right: 0;
             margin: 0 auto;
             z-index: 1;
-            border-radius: .5em;
+            border-radius: @border-ra;
 
             &:hover {
                 background: red;
@@ -246,18 +325,6 @@ const showDrawer = () => {
 
     .active {
         font-weight: bolder;
-    }
-}
-.float-option{
-    position: fixed;
-    z-index: 999;
-    bottom: 30px;
-    right: 30px;
-    >div{
-        width: 40px;
-        height: 40px;
-        margin-top: 10px;
-        background: red;
     }
 }
 </style>

@@ -187,7 +187,7 @@ import { ElScrollbar } from 'element-plus';
 
     &::after {
         content: '';
-        background: rgba(255, 255, 255, .3);
+        background: @background-modle;
         height: 100%;
         width: 100%;
         position: absolute;

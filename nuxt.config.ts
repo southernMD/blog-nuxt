@@ -19,7 +19,7 @@ export default defineNuxtConfig({
             }
         },
         plugins: [
-            ElementPlus()
+            ElementPlus(),
         ],
     },
     modules: ['@pinia/nuxt'],
