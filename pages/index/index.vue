@@ -17,11 +17,18 @@
 
 <script setup lang="ts">
 import { useApp } from '@/stores'
+import {Ref} from 'vue'
 import { ElImage,ElAvatar } from 'element-plus';
 const AppPinia = useApp()
 let scrollbarVal = toRef(AppPinia, 'scrollbarVal')
 const imgObj = await useGetImage() as ResOptions<any>
-const imgSrc:ResOptions<any> = imgObj.result
+const { public: { VITE_PACK_ENV } } = useRuntimeConfig() // 3.0正式版环境变量要从useRuntimeConfig里的public拿
+let imgSrc = ref() as Ref<ResOptions<any>>
+if(VITE_PACK_ENV == 'build'){
+    imgSrc.value = imgObj.result[1]
+}else{
+    imgSrc.value = imgObj.result[0]
+}
 const yiyan = await useGetYiYan()
 </script>
 
