@@ -1,9 +1,9 @@
 <template>
-    <div class="block-gather">
-        <div @click.stop class="message" ref="message" :class="{'message-way':orderChange,'show':showflag}">
+    <div class="block-gather" :class="{'move':showflag}">
+        <div class="message" ref="message" :class="{'message-way':orderChange,'show':showflag,'message-l':optionDirectionFlag}">
             <slot name="message"></slot>
         </div>
-        <div class="block" ref="block" @mouseover="showMessage" @mouseout="hideMessage">
+        <div class="block" ref="block" @click="handleClick" @mouseover="showMessage" @mouseout="hideMessage" :class="{'bk-color':showflag}">
             <slot name="icon"></slot>
         </div>
     </div>
@@ -11,24 +11,26 @@
 </template>
 
 <script setup lang="ts">
-
-const el = getCurrentInstance()
-type PROPS = {
+import {useApp} from '@/stores'
+const $el = getCurrentInstance()
+const AppPinia = useApp()
+let orderChange = toRef(AppPinia,'orderChange')
+let optionDirectionFlag = toRef(AppPinia,'optionDirectionFlag')
+type pps = {
     height?: string
     width?: string
-    orderChange:boolean
 }
 
-withDefaults(defineProps<PROPS>(), {
+withDefaults(defineProps<pps>(), {
     height: '42px',
     width: '42px'
 })
 
 onMounted(() => {
-    let dom = el?.refs.block as HTMLElement
-    let message = el?.refs.message as HTMLElement
-    dom.style.width = el?.props.width as string
-    dom.style.height = el?.props.height as string
+    let dom = $el?.refs.block as HTMLElement
+    let message = $el?.refs.message as HTMLElement
+    dom.style.width = $el?.props.width as string
+    dom.style.height = $el?.props.height as string
 })
 
 let showflag = ref(false)
@@ -40,41 +42,53 @@ const hideMessage = ()=>{
     showflag.value = false
 }
 
+const $emit = defineEmits(['block'])
+const handleClick = ()=>{
+    $emit('block')
+}
+
 </script>
 
 <style scoped lang="less">
 .show{
     opacity: 1 !important;
 }
+.move{
+    transform: translateY(-3px);
+}
+.bk-color{
+    background-color: @block-hover-bk !important;
+}
 .block-gather {
     display: flex;
-    width: 200px;
+    width: auto;
     margin-top: 10px;
     align-items: center;
+    transition: transform .2s linear;
     .block {
         width: 42px;
         height: 42px;
-        background: @background-color;
+        background-color: @background-color;
         border-radius: @border-ra;
         transition: all .2s linear;
         display: flex;
         justify-content: center;
         align-items: center;
         color: @font-color;
-        margin-left: 10px;
-        margin-right: 10px;
+        cursor: pointer;
     }
     .message {
         box-sizing: border-box;
         width: 80px;
         height: 35px;
-        background: #31365b;
+        background-color: #31365b;
         border-radius: @border-ra;
         display: flex;
         justify-content: center;
         align-items: center;
         opacity: 0;
         transition: all .2s linear;
+        transform: translateX(-10px);
         :slotted(.message) {
             color: #bebebe;
             font-weight: bold;
@@ -84,6 +98,9 @@ const hideMessage = ()=>{
 
         // top: 0;
         // bottom: 0;
+    }
+    .message-l{
+        transform: translateX(10px);
     }
     .message-way{
         order: 2;

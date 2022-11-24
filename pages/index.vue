@@ -13,177 +13,54 @@
     </Head>
     <NuxtLayout name="maintemplate">
         <template #default>
-            <el-scrollbar>
-                <div style="height:100vh;">
-                    right: 20p;
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum nisi voluptas odio eligendi
-                    reprehenderit quos fugiat accusamus eveniet earum porro? Amet consectetur nesciunt quam vitae!
-                    Itaque repellat molestiae necessitatibus adipisci
-                </div>
+            <el-scrollbar ref="scrollbarRef" @scroll="barScroll">
+                <NuxtPage></NuxtPage>
             </el-scrollbar>
-
         </template>
     </NuxtLayout>
 </template>
 
 <script setup lang="ts">
 import { ElScrollbar } from 'element-plus';
+import { useApp } from '@/stores'
+const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
+const AppPinia = useApp()
+let toTopFlag = toRef(AppPinia, 'toTopFlag')
+let scrollbarVal = toRef(AppPinia, 'scrollbarVal')
+let windowWidth = toRef(AppPinia, 'windowWidth')
+
+watch(toTopFlag, () => {
+    if (toTopFlag.value == true) {
+        goToTop()
+    }
+    toTopFlag.value = false
+})
+
+const goToTop = () => {
+    scrollbarRef.value!.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    })
+}
+
+const barScroll = (scrollObj: any) => {
+    // console.log(scrollObj.scrollTop);
+    scrollbarVal.value = scrollObj.scrollTop
+}
 </script>
 
 <style lang="less">
+.el-scrollbar__thumb {
+    display: none;
+}
+
 .el-drawer__body {
     padding: 0 !important;
     background-image: url(/tamaonsen.jpeg);
     background-size: cover;
     background-repeat: no-repeat;
     background-position-x: -150px;
+    min-height: 358px;
 
     &::after {
         content: '';
@@ -197,6 +74,7 @@ import { ElScrollbar } from 'element-plus';
 }
 
 body {
+    width: 100% !important;
     &::before {
         content: '';
         display: block;
@@ -212,4 +90,5 @@ body {
         background-repeat: no-repeat;
     }
 }
+
 </style>

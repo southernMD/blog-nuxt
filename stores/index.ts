@@ -4,21 +4,20 @@ export const useApp = defineStore("app", {
   state: () => {
     return {
       windowWidth: 1200,
-      theme: 'light'
+      theme: 'light',
+      optionDirectionFlag:false,
+      hideFlag:true,
+      orderChange:false,
+      toTopFlag:false,
+      scrollbarVal:0,
+      activeBlock:'首页',
     };
   },
   actions: {
 
   },
   persist: {
-    enabled: true,
-    strategies: [
-      {
-        key: "APP",
-        storage: process.client ? localStorage : undefined,
-        paths:['theme']
-      },
-    ],
+    paths:['theme','optionDirectionFlag','hideFlag','orderChange']
   },
 });
 
