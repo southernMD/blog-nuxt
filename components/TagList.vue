@@ -16,8 +16,8 @@
 
 <script setup lang="ts">
 import { Ref } from 'vue'
-import { sample, debounce } from 'lodash'
 import { ElTag, ElScrollbar } from 'element-plus';
+const {sample, debounce} = require('lodash')
 const tags = ref(['electron', 'nodejs', 'b', 'javascript', 'html', 'css', 'c++', 'asd', '十年'])
 const tagsCopy = ref(tags.value) as Ref<any>
 const tagsColor = ['success', 'info', 'warning', 'danger', '']
