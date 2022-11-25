@@ -63,3 +63,15 @@ input{
 	outline: none;
 	border: none;
 }
+
+div::selection,span::selection ,input::selection{
+	background:var(--backgroundBtn) !important; 
+}
+
+div::-moz-selection,span::-moz-selection,input::-moz-selection {
+	background:var(--backgroundBtn) !important; 
+}
+
+div::-webkit-selection,span::-webkit-selection,input::-webkit-selection {
+	background:var(--backgroundBtn) !important; 
+}
