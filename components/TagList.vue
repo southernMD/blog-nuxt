@@ -5,7 +5,7 @@
         </div>
         <div class="taglist">
             <el-scrollbar>
-                <el-tag v-for="val in tagsCopy" :key="val" :type="sample(tagsColor)" effect="plain">
+                <el-tag v-for="val in tagsCopy" :key="val" :type="_.sample(tagsColor)" effect="plain">
                     {{ val }}
                 </el-tag>
             </el-scrollbar>
@@ -16,8 +16,8 @@
 
 <script setup lang="ts">
 import { Ref } from 'vue'
+import _  from 'lodash'
 import { ElTag, ElScrollbar } from 'element-plus';
-const {sample, debounce} = require('lodash')
 const tags = ref(['electron', 'nodejs', 'b', 'javascript', 'html', 'css', 'c++', 'asd', '十年'])
 const tagsCopy = ref(tags.value) as Ref<any>
 const tagsColor = ['success', 'info', 'warning', 'danger', '']
@@ -28,7 +28,7 @@ const search = () => {
         return val.includes(searchVal.value)
     })
 }
-const debounceSearch = debounce(search, 300)
+const debounceSearch = _.debounce(search, 300)
 </script>
 
 <style scoped lang="less">
