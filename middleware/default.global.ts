@@ -1,3 +1,5 @@
+import { useApp } from '@/stores'
+
 export default defineNuxtRouteMiddleware((to, from) => {
     // if(useRoute().matched.length === 0){
     //     abortNavigation()

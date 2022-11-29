@@ -9,6 +9,8 @@ export const useSkin = (op:string)=>{
         document.getElementsByTagName('body')[0].style.setProperty('--selectColor', `#333333`);
         document.getElementsByTagName('body')[0].style.setProperty('--splitColor', `#222`);
         document.getElementsByTagName('body')[0].style.setProperty('--fontColorHover', `#111`);
+        document.getElementsByTagName('body')[0].style.setProperty('--boxShString', `0 0 25px #333`);
+        
         
     }else if(op == 'dark'){
         document.getElementsByTagName('body')[0].style.setProperty('--backgroundBtn', `rgba(0, 0, 0, .6)`);
@@ -20,5 +22,6 @@ export const useSkin = (op:string)=>{
         document.getElementsByTagName('body')[0].style.setProperty('--selectColor', `#272c47`);
         document.getElementsByTagName('body')[0].style.setProperty('--splitColor', `#aeaeae`);
         document.getElementsByTagName('body')[0].style.setProperty('--fontColorHover', `#9e9e9e`);
+        document.getElementsByTagName('body')[0].style.setProperty('--boxShString', `0 0 25px #f4f5f5`);
     }
 }

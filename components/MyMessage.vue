@@ -1,12 +1,12 @@
 <template>
-    <div>
+    <div class="MyMessage">
         <el-image :src="imgSrc" style="width:300px; height: 200px;" fit="cover">
             <template #placeholder>
                 <div></div>
             </template>
         </el-image>
-        <img draggable="false" src="https://gravatar.loli.net/avatar/e6b6cb8333565fd6cff15e3c8ba8ade1?s=80" alt="">
-        <div class="name">南山有壶酒</div>
+        <img class="header" draggable="false" src="https://gravatar.loli.net/avatar/e6b6cb8333565fd6cff15e3c8ba8ade1?s=80" alt="">
+        <h1 class="name">南山有壶酒</h1>
         <div class="yiyan">
             <span>{{ yiyan }}</span>
         </div>
@@ -54,21 +54,29 @@ const yiyan = await useGetYiYan()
 </script>
 
 <style scoped lang="less">
+.MyMessage{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 461px;
+    order: 2;
+    >*{
+        position: relative;
+        z-index: 0;
+        margin-top: 20px;
+    }
+}
 .el-image {
     border-radius: @border-ra;
     user-select: none;
-
+    margin-top: 0px;
     img {
         user-select: none;
     }
 }
 
 img {
-    position: absolute;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    top: calc(200px - 50px);
+    margin-top: -50px !important;
     user-select: none;
     height: 100px;
     width: 100px;
@@ -77,12 +85,7 @@ img {
 }
 
 .name {
-    position: absolute;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
     width: 125px;
-    top: calc(200px - 50px + 120px);
     color: @font-color;
     font-weight: bolder;
     font-size: 25px;
@@ -90,13 +93,7 @@ img {
 }
 
 .yiyan {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: calc(200px - 50px + 170px);
-    margin: 0 auto;
     width: 100%;
-
     >span {
         display: inline-block;
         width: 100%;
@@ -108,13 +105,7 @@ img {
 .nav-list {
     height: 40px;
     width: 125px;
-    position: absolute;
-    bottom: 100px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
     display: flex;
-
     .nav {
         display: flex;
 
@@ -134,6 +125,8 @@ img {
         justify-content: center;
         align-items: center;
         color: @font-color;
+        position: relative;
+        z-index: 0;
 
         .title {
             width: 100%;
@@ -149,14 +142,9 @@ img {
 }
 
 .link {
-    position: absolute;
-    bottom: 70px;
-    left: 0;
-    right: 0;
-    width: 150px;
-    margin: 0 auto;
     display: flex;
-
+    position: relative;
+    z-index: 0;
     a {
         margin: 0 5px;
 

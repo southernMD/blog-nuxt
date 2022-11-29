@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-
 export const useApp = defineStore("app", {
   state: () => {
     return {
@@ -10,14 +9,14 @@ export const useApp = defineStore("app", {
       orderChange:false,
       toTopFlag:false,
       scrollbarVal:0,
-      activeBlock:'首页',
+      activeBlock:'',
     };
   },
   actions: {
 
   },
-  persist: {
-    paths:['theme','optionDirectionFlag','hideFlag','orderChange']
-  },
+  persist: [{
+    paths:['theme','optionDirectionFlag','hideFlag','orderChange'],
+  }]
 });
 

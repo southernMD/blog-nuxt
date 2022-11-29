@@ -57,12 +57,13 @@ const barScroll = (scrollObj: any) => {
 .el-drawer__body {
     padding: 0 !important;
     background-image: url(/tamaonsen.jpeg);
-    background-size: cover;
+    background-size: auto 100%;
     background-repeat: no-repeat;
     background-position-x: -150px;
     min-height: 358px;
-
-    &::after {
+    height: 1000px;
+    overflow: hidden;
+    &::before {
         content: '';
         background: @background-modle;
         height: 100%;
@@ -72,7 +73,46 @@ const barScroll = (scrollObj: any) => {
         top: 0;
     }
 }
+.ltr{
+    .el-image{
+        width: 100% !important;
+    }
+    .el-input {
+        background: none;
+        margin-bottom: 10px;
+        width: 100%;
+        border-radius: @border-ra;
+        margin-top:5px ;
+        .el-input__wrapper {
+            border-radius: @border-ra;
+            width: 100%;
+            box-shadow: none !important;
+            background-color: @background-color-op;
 
+            input {
+                width: 100%;
+                color: @font-color;
+                font-size: 14px;
+
+                &::placeholder {
+                    color: @font-color;
+                    opacity: 0.4;
+                }
+            }
+        }
+    }
+
+    &::before {
+        content: '';
+        background: @background-color-op;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+}
 body {
     width: 100% !important;
     &::before {
@@ -83,12 +123,38 @@ body {
         right: 0;
         top: 0;
         bottom: 0;
-        z-index: -2;
+        z-index: -5;
         background: url(/tamaonsen.jpeg);
         background-position: center;
         background-size: cover;
         background-repeat: no-repeat;
     }
 }
+.option {
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+    color: @font-color;
+    user-select: none;
+    position: relative;
+    z-index: 0;
+    margin: 0 auto;
+    margin-top: 5px;
+    order: 3;
+    >div {
+        height: 25px;
+        box-sizing: border-box;
+        margin: 0 5px;
+        cursor: pointer;
 
+        &:hover {
+            color: @font-color-hover;
+            border-color: @font-color-hover;
+        }
+    }
+
+    .active {
+        border-bottom: 2px solid @font-color;
+    }
+}
 </style>

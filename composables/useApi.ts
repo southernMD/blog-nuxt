@@ -20,3 +20,10 @@ export const useGetYiYan = async()=>{
         resolve(result)
     })
 }
+
+export const useGetArticlesList = async(nowPage:number,pageSize:number)=>{
+    let result = await Http.get('/show/article',{nowPage,pageSize})
+    return new Promise<ResOptions<any>>((resolve, reject) => {
+        resolve(result)
+    })
+}

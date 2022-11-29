@@ -2,7 +2,7 @@
     <div class="maintemplate">
 
         <Head>
-            <Link rel="stylesheet" href="//at.alicdn.com/t/c/font_3736505_yqewonkfl2.css">
+            <Link rel="stylesheet" href="//at.alicdn.com/t/c/font_3736505_oh3rlks2ki.css">
             </Link>
             <Link rel="icon" href="/favicon.ico">
             </Link>
@@ -10,7 +10,10 @@
         <Transition name="title-way">
             <div class="title" v-show="scrollbarVal < 100">
                 <div class="title-main">
-                    <div class="name" @click="go('/')">
+                    <div class="search" @click="showSearchDrawer">
+                        <i class="iconfont icon-search"></i>
+                    </div>
+                    <div class="name" @click="go('首页')">
                         <span>southernMD&nbsp;南山有壶酒</span>
                     </div>
                     <div class="nav-list">
@@ -24,13 +27,29 @@
                         <i class="iconfont icon-caidan"></i>
                     </div>
                     <Teleport to="body">
-                        <el-drawer v-model="drawerFlag" :append-to-body="true" :show-close="false" :with-header="false">
+                        <el-drawer v-model="drawerFlag" :append-to-body="true" :show-close="false" :with-header="false"  size="70%">
                             <div class="nav-list-phone">
                                 <div class="nav" v-for="(val, index) in navArr" :key="val" @click="go(val)"
                                     :class="{ 'active': val == activeBlock }">
                                     <span><i class="iconfont" :class="navicons[index]"></i>{{ val }}</span>
                                 </div>
                             </div>
+                        </el-drawer>
+                        <el-drawer v-model="SearchDrawerFlag" :append-to-body="true" :show-close="false" :with-header="false" direction="ltr" size="70%">
+                            <el-scrollbar>
+                                <div id="left-drawer">
+                                    <el-input v-model="searchVal" placeholder="search in station ..." @keydown.enter="goSearch">
+                                    <template #suffix>
+                                            <i class="iconfont icon-search" style="font-size:18px;cursor: pointer;" @click.self="goSearch"></i>
+                                        </template>
+                                    </el-input>
+                                    <Component :is="flag == 0 ? MyMessage : TagList"></Component>
+                                    <div class="option">
+                                        <div class="one" @click="change(0)" :class="{ active: flag == 0 }">站点信息</div>
+                                        <div class="two" @click="change(1)" :class="{ active: flag == 1 }">标签云</div>
+                                    </div>
+                                </div>
+                            </el-scrollbar>
                         </el-drawer>
                     </Teleport>
                 </div>
@@ -104,9 +123,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
-import { ElDrawer, ElButton, ElIcon } from 'element-plus'
+import { ElDrawer, ElButton, ElIcon,ElInput,ElScrollbar} from 'element-plus'
 import { ArrowLeftBold, ArrowRightBold, Sunny, Moon, Hide, CaretLeft, CaretRight, Top } from '@element-plus/icons-vue'
 import { useApp } from '@/stores/index'
+const MyMessage = resolveComponent('MyMessage')
+const TagList = resolveComponent('TagList')
 const $router = useRouter()
 const AppPinia = useApp()
 const navArr = ['首页', '文章', '留言版', '实验室', '十年', '关于'];
@@ -115,7 +136,7 @@ let theme = toRef(AppPinia, 'theme')
 let drawerFlag = ref(false)
 let scrollbarVal = toRef(AppPinia, 'scrollbarVal')
 
-let activeBlock = toRef(AppPinia,'activeBlock');
+let activeBlock = toRef(AppPinia, 'activeBlock');
 const go = (path: string) => {
     let p = ''
     drawerFlag.value = false
@@ -156,8 +177,11 @@ onMounted(() => {
 })
 
 watch(windowWidth, () => {
-    if (windowWidth.value >= 512) {
+    if (windowWidth.value >= 750) {
         drawerFlag.value = false
+    }
+    if(windowWidth.value >=915){
+        SearchDrawerFlag.value = false
     }
 })
 
@@ -165,6 +189,23 @@ const showDrawer = () => {
     console.log('123');
     drawerFlag.value = true
     console.log(drawerFlag.value);
+}
+
+let SearchDrawerFlag = ref(false)
+const showSearchDrawer = () =>{
+    SearchDrawerFlag.value = true
+}
+
+let searchVal = ref('')
+
+const goSearch = ()=>{
+    console.log(searchVal.value);
+    searchVal.value = ''
+}
+
+let flag = ref(0)
+const change = (num: number) => {
+    flag.value = num;
 }
 
 let optionDirectionFlag = toRef(AppPinia, 'optionDirectionFlag')
@@ -214,7 +255,8 @@ const goToTop = () => {
 .hide {
     display: none !important;
 }
-.title-margin{
+
+.title-margin {
     margin-top: 60px;
 }
 
@@ -229,6 +271,7 @@ const goToTop = () => {
         position: fixed;
         top: 0;
         z-index: 1000;
+
         .title-main {
             width: 80%;
             height: 100%;
@@ -237,18 +280,38 @@ const goToTop = () => {
 
             .name {
                 user-select: none;
-                width: 200px;
+                width: 160px;
                 height: 100%;
                 display: flex;
                 align-items: center;
                 padding-left: 10px;
                 cursor: pointer;
+                margin-right: 40px;
 
                 >span {
                     color: white;
                     font-size: 14px;
                 }
 
+            }
+
+            .search {
+                position: absolute;
+                left: 10px;
+                top: 0;
+                bottom: 0;
+                margin: auto 0;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                display: none;
+
+                i {
+                    width: 20px;
+                    height: 20px;
+                    font-size: 20px;
+                    color: white;
+                }
             }
 
             .nav-list {
@@ -296,9 +359,14 @@ const goToTop = () => {
                 }
             }
 
-            @media (max-width:720px) {
+            @media (max-width:750px) {
                 .nav-list {
                     display: none
+                }
+
+                .name {
+                    margin: 0 auto;
+                    padding-left: 10px !important;
                 }
             }
 
@@ -322,8 +390,14 @@ const goToTop = () => {
                 }
             }
 
-            @media (max-width: 720px) {
+            @media (max-width: 750px) {
                 .menu {
+                    display: block;
+                }
+            }
+
+            @media (max-width:915px) {
+                .search {
                     display: block;
                 }
             }
@@ -341,6 +415,11 @@ const goToTop = () => {
                 bottom: 0;
                 margin: auto 0;
             }
+
+            .name {
+                padding-left: 40px !important;
+            }
+
         }
     }
 
@@ -418,7 +497,7 @@ const goToTop = () => {
         margin-top: 5px;
 
         >span {
-            padding-left: 20px;
+            padding-left: 7%;
             z-index: 2;
             position: relative;
             cursor: pointer;
@@ -474,6 +553,16 @@ const goToTop = () => {
 
 .title-way-enter-from {
     transform: translateY(-100px);
+}
+
+#left-drawer{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    >.el-input{
+        order: 1;
+    }
 }
 
 //开始过度了

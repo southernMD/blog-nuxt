@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="taglist-bk">
         <div class="inpt">
             <input type="text" v-model="searchVal" @input="debounceSearch" placeholder="Search Tags...">
         </div>
@@ -20,7 +20,7 @@ import _  from 'lodash'
 import { ElTag, ElScrollbar } from 'element-plus';
 const tags = ref(['electron', 'nodejs', 'b', 'javascript', 'html', 'css', 'c++', 'asd', '十年'])
 const tagsCopy = ref(tags.value) as Ref<any>
-const tagsColor = ['success', 'info', 'warning', 'danger', '']
+const tagsColor = ['success', 'warning', 'danger', '']
 let searchVal = ref('')
 const search = () => {
     tagsCopy.value = []
@@ -32,15 +32,19 @@ const debounceSearch = _.debounce(search, 300)
 </script>
 
 <style scoped lang="less">
+.taglist-bk{
+    order: 2;
+}
 .inpt {
     height: 40px;
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
     border-bottom: 1px solid @font-color;
-    margin-top: 10px;
+    z-index: 0;
+    position: relative;
 }
 
 input {
@@ -51,16 +55,17 @@ input {
 }
 
 .taglist {
-    width: 280px;
+    width: 260px;
     margin: 0 auto;
     margin-top: 20px;
     height: 400px;
     max-width: 100%;
-    margin-bottom: 60px;
 
     .el-tag {
         background-color: rgba(0, 0, 0, 0);
         margin: 5px 5px;
+        user-select: none;
+        cursor: pointer;
     }
 }
 </style>
