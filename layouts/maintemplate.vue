@@ -27,7 +27,8 @@
                         <i class="iconfont icon-caidan"></i>
                     </div>
                     <Teleport to="body">
-                        <el-drawer v-model="drawerFlag" :append-to-body="true" :show-close="false" :with-header="false"  size="70%">
+                        <el-drawer v-model="drawerFlag" :append-to-body="true" :show-close="false" :with-header="false"
+                            size="70%">
                             <div class="nav-list-phone">
                                 <div class="nav" v-for="(val, index) in navArr" :key="val" @click="go(val)"
                                     :class="{ 'active': val == activeBlock }">
@@ -35,18 +36,22 @@
                                 </div>
                             </div>
                         </el-drawer>
-                        <el-drawer v-model="SearchDrawerFlag" :append-to-body="true" :show-close="false" :with-header="false" direction="ltr" size="70%">
+                        <el-drawer v-model="SearchDrawerFlag" :append-to-body="true" :show-close="false"
+                            :with-header="false" direction="ltr" size="70%" destroy-on-close >
                             <el-scrollbar>
                                 <div id="left-drawer">
-                                    <el-input v-model="searchVal" placeholder="search in station ..." @keydown.enter="goSearch">
-                                    <template #suffix>
-                                            <i class="iconfont icon-search" style="font-size:18px;cursor: pointer;" @click.self="goSearch"></i>
+                                    <el-input v-model="searchVal" placeholder="search in station ..."
+                                        @keydown.enter="goSearch">
+                                        <template #suffix>
+                                            <i class="iconfont icon-search" style="font-size:18px;cursor: pointer;"
+                                                @click.self="goSearch"></i>
                                         </template>
                                     </el-input>
-                                    <Component :is="flag == 0 ? MyMessage : TagList"></Component>
+                                    <Component :is="comps[flag]">
+                                    </Component>
                                     <div class="option">
-                                        <div class="one" @click="change(0)" :class="{ active: flag == 0 }">站点信息</div>
-                                        <div class="two" @click="change(1)" :class="{ active: flag == 1 }">标签云</div>
+                                        <div v-for="(val, index) in tagslen" @click="change(index)"
+                                            :class="{ active: flag == index }" :key="val">{{ tags[index] }}</div>
                                     </div>
                                 </div>
                             </el-scrollbar>
@@ -122,19 +127,52 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router';
-import { ElDrawer, ElButton, ElIcon,ElInput,ElScrollbar} from 'element-plus'
+import { useRouter, useRoute } from 'vue-router';
+import { ElDrawer, ElButton, ElIcon, ElInput, ElScrollbar } from 'element-plus'
 import { ArrowLeftBold, ArrowRightBold, Sunny, Moon, Hide, CaretLeft, CaretRight, Top } from '@element-plus/icons-vue'
 import { useApp } from '@/stores/index'
-const MyMessage = resolveComponent('MyMessage')
-const TagList = resolveComponent('TagList')
 const $router = useRouter()
+const $route = useRoute()
 const AppPinia = useApp()
 const navArr = ['首页', '文章', '留言版', '实验室', '十年', '关于'];
 const navicons = ['icon-shouye', 'icon-wenzhang', 'icon-liuyan', 'icon-flask', 'icon-zhiwu', 'icon-guanyu']
 let theme = toRef(AppPinia, 'theme')
 let drawerFlag = ref(false)
 let scrollbarVal = toRef(AppPinia, 'scrollbarVal')
+
+const MyMessage = resolveComponent('MyMessage')
+const TagList = resolveComponent('TagList')
+const Directory = resolveComponent('Directory')
+const comps = shallowRef([MyMessage, TagList, Directory])
+const tags = ref(['站点信息', '标签云','目录'])
+let tagslen = ref(2)
+let flag = ref(0)
+const change = (num: number) => {
+    flag.value = num;
+}
+const path2 = toRef($route, 'path');
+watch(path2, () => {
+    console.log(tags.value);
+    if (path2.value.includes('articles')) {
+        const arr = path2.value.split('/');
+        if (arr.length == 3) {
+            console.log('执行1');
+            tagslen.value = 3
+            flag.value = 2
+        } else if (arr.length == 2) {
+            console.log('执行2');
+            flag.value = 0
+            tagslen.value = 2
+        }
+    } else {
+        if (tags.value.length == 3) {
+            console.log('执行3');
+            flag.value = 0
+            tagslen.value = 2
+        }
+    }
+})
+
 
 let activeBlock = toRef(AppPinia, 'activeBlock');
 const go = (path: string) => {
@@ -180,7 +218,7 @@ watch(windowWidth, () => {
     if (windowWidth.value >= 750) {
         drawerFlag.value = false
     }
-    if(windowWidth.value >=915){
+    if (windowWidth.value >= 915) {
         SearchDrawerFlag.value = false
     }
 })
@@ -192,20 +230,15 @@ const showDrawer = () => {
 }
 
 let SearchDrawerFlag = ref(false)
-const showSearchDrawer = () =>{
+const showSearchDrawer = () => {
     SearchDrawerFlag.value = true
 }
 
 let searchVal = ref('')
 
-const goSearch = ()=>{
+const goSearch = () => {
     console.log(searchVal.value);
     searchVal.value = ''
-}
-
-let flag = ref(0)
-const change = (num: number) => {
-    flag.value = num;
 }
 
 let optionDirectionFlag = toRef(AppPinia, 'optionDirectionFlag')
@@ -444,6 +477,13 @@ const goToTop = () => {
         }
     }
 
+    @media (max-width:750px) {
+        .float-option {
+            transform: scale(0.8, 0.8);
+            right: -10px;
+        }
+    }
+
     .float-option-active {
         opacity: 0;
     }
@@ -453,11 +493,17 @@ const goToTop = () => {
         left: 30px;
     }
 
+    @media (max-width:750px) {
+        .float-option-l {
+            left: 0px;
+        }
+    }
+
     .float-option-small {
         position: fixed;
         right: 0;
         left: auto;
-        bottom: 30px;
+        bottom: 31px;
         width: 20px;
         height: 40px;
         background-color: @background-color;
@@ -473,6 +519,13 @@ const goToTop = () => {
         cursor: pointer;
         color: @font-color;
 
+    }
+
+    @media (max-width:750px) {
+        .float-option-small {
+            transform: scale(0.8, 0.8);
+            bottom: 47px;
+        }
     }
 
     .float-option-small-l {
@@ -555,12 +608,13 @@ const goToTop = () => {
     transform: translateY(-100px);
 }
 
-#left-drawer{
+#left-drawer {
     display: flex;
     align-items: center;
     flex-direction: column;
     height: 100vh;
-    >.el-input{
+
+    >.el-input {
         order: 1;
     }
 }

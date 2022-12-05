@@ -14,7 +14,7 @@
     <NuxtLayout name="maintemplate">
         <template #default>
             <el-scrollbar ref="scrollbarRef" @scroll="barScroll">
-                <NuxtPage></NuxtPage>
+                <LazyNuxtPage></LazyNuxtPage>
             </el-scrollbar>
         </template>
     </NuxtLayout>
@@ -115,6 +115,7 @@ const barScroll = (scrollObj: any) => {
 }
 body {
     width: 100% !important;
+    scroll-behavior: smooth;
     &::before {
         content: '';
         display: block;

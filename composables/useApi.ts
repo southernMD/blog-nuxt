@@ -27,3 +27,17 @@ export const useGetArticlesList = async(nowPage:number,pageSize:number)=>{
         resolve(result)
     })
 }
+
+export const useGetArticle = async(id:number | string)=>{
+    let result = await Http.get(`/show/article/${id}`)
+    return new Promise<ResOptions<any>>((resolve, reject) => {
+        resolve(result)
+    })
+}
+
+export const usePostComment = async(obj:any)=>{
+    let result = await Http.post(`/show/comment`,obj)
+    return new Promise<ResOptions<any>>((resolve, reject) => {
+        resolve(result)
+    })
+}

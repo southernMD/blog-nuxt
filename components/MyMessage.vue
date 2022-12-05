@@ -5,7 +5,8 @@
                 <div></div>
             </template>
         </el-image>
-        <img class="header" draggable="false" src="https://gravatar.loli.net/avatar/e6b6cb8333565fd6cff15e3c8ba8ade1?s=80" alt="">
+        <img class="header" draggable="false"
+            src="https://gravatar.loli.net/avatar/e6b6cb8333565fd6cff15e3c8ba8ade1?s=80" alt="">
         <h1 class="name">南山有壶酒</h1>
         <div class="yiyan">
             <span>{{ yiyan }}</span>
@@ -33,43 +34,44 @@
             </NuxtLink>
         </div>
     </div>
-
 </template>
 
 <script setup lang="ts">
 import { Ref } from 'vue'
-import { ElImage, ElAvatar } from 'element-plus';
+import { ElImage, ElAvatar, ElSkeleton } from 'element-plus';
 const imgObj = await useGetImage() as ResOptions<any>
 const { public: { VITE_PACK_ENV } } = useRuntimeConfig() // 3.0正式版环境变量要从useRuntimeConfig里的public拿
 let imgSrc = ref() as Ref<ResOptions<any>>
 if (VITE_PACK_ENV == 'build') {
-    imgSrc.value = imgObj.result[1]
+    imgSrc.value = imgObj.result[0]
 } else {
     imgSrc.value = imgObj.result[0]
 }
 const navMessage = [0, 0, 0]
 const navTitle = ['文章', '分类', '标签']
 const yiyan = await useGetYiYan()
-
 </script>
 
 <style scoped lang="less">
-.MyMessage{
+.MyMessage {
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 461px;
     order: 2;
-    >*{
+
+    >* {
         position: relative;
         z-index: 0;
         margin-top: 20px;
     }
 }
+
 .el-image {
     border-radius: @border-ra;
     user-select: none;
     margin-top: 0px;
+
     img {
         user-select: none;
     }
@@ -94,6 +96,7 @@ img {
 
 .yiyan {
     width: 100%;
+
     >span {
         display: inline-block;
         width: 100%;
@@ -106,6 +109,7 @@ img {
     height: 40px;
     width: 125px;
     display: flex;
+
     .nav {
         display: flex;
 
@@ -145,6 +149,7 @@ img {
     display: flex;
     position: relative;
     z-index: 0;
+
     a {
         margin: 0 5px;
 

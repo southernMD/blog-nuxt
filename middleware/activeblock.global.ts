@@ -23,4 +23,5 @@ export default defineNuxtRouteMiddleware((to, from) => {
             AppPinia.activeBlock = '关于'
             break;
     }
+    if(to.path.includes('articles'))AppPinia.activeBlock = '文章'
 })

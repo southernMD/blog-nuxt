@@ -1,13 +1,15 @@
 <template>
-    <div class="article-list-item" v-lazy-directive>
+    <div class="article-list-item" v-lazy-directive @click="detail">
         <el-image :src="ArticlesList.imgUrl" fit="cover">
         </el-image>
         <div class="txt">
-            <div class="title">
-                {{ArticlesList.title}}</div>
-            <div class="title2" v-show="true">{{ArticlesList.title2}}
+            <div class="title" @click.stop>
+                {{ArticlesList.title}}
             </div>
-            <div class="icons">
+            <div class="title2" v-show="true" @click.stop>
+                {{ArticlesList.title2}}
+            </div>
+            <div class="icons" @click.stop>
                 <div class="time">
                     <el-icon>
                         <Calendar />
@@ -32,7 +34,7 @@
                     <el-tag size="small" v-for="(val,index) in (tags)" :key="index">{{val}}</el-tag>
                 </div>
             </div>
-            <div class="main-txt">
+            <div class="main-txt" @click.stop>
                {{ArticlesList.text}}
             </div>
         </div>
@@ -43,11 +45,12 @@
 import { Directive,ComponentInternalInstance } from 'vue';
 import { Calendar, ChatDotRound, View } from '@element-plus/icons-vue';
 import {  ElImage, ElIcon, ElTag } from 'element-plus';
-const $el = getCurrentInstance() as ComponentInternalInstance 
-defineProps<{
+import { useRouter } from 'vue-router';
+const $router = useRouter()
+const props = defineProps<{
     ArticlesList:ArticleObj
 }>()
-const tags =($el.props.ArticlesList as ArticleObj).tags.length == 0?[]:($el.props.ArticlesList as ArticleObj).tags.split(',')
+const tags =(props.ArticlesList as ArticleObj).tags.length == 0?[]:(props.ArticlesList as ArticleObj).tags.split(',')
 const vLazyDirective: Directive = (el: HTMLElement) => {
     console.log(el);
     const observer = new IntersectionObserver(([{ isIntersecting }]) => {
@@ -60,6 +63,12 @@ const vLazyDirective: Directive = (el: HTMLElement) => {
         }
     })
     observer.observe(el)
+}
+
+const detail = ()=>{
+    $router.push({
+        path:`/articles/${props.ArticlesList.id}`
+    })
 }
 
 </script>
@@ -75,7 +84,7 @@ const vLazyDirective: Directive = (el: HTMLElement) => {
     display: flex;
     align-items: center;
     overflow: hidden;
-
+    cursor: pointer;
     .el-image {
         border-radius: @border-ra;
         width: 35%;
@@ -98,7 +107,10 @@ const vLazyDirective: Directive = (el: HTMLElement) => {
     .txt {
         color: @font-color;
         margin-left: 20px;
-
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 60%;
         >* {
             margin-top: 10px;
         }
@@ -109,11 +121,17 @@ const vLazyDirective: Directive = (el: HTMLElement) => {
 
         .icons {
             display: flex;
+            user-select: none;
 
             >* {
                 display: flex;
                 align-items: center;
                 margin-right: 5px;
+            }
+            .time{
+                >span{
+                    line-height: 20px;
+                }
             }
             .tags{
                 .el-tag{
@@ -126,7 +144,6 @@ const vLazyDirective: Directive = (el: HTMLElement) => {
 
         .title {
             font-size: 18px;
-            max-width: 80%;
             letter-spacing: 2px;
             line-height: 20px;
             max-height: 40px;
@@ -135,8 +152,6 @@ const vLazyDirective: Directive = (el: HTMLElement) => {
 
         .title2 {
             height: 20px;
-            max-width: 80%;
-            width: 80%;
             max-height: 20px;
             overflow: hidden;
             line-height: 20px;
@@ -144,12 +159,32 @@ const vLazyDirective: Directive = (el: HTMLElement) => {
 
         .main-txt {
             line-height: 21px;
-            max-width: 80%;
             max-height: 40px;
+            max-width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
-            display: inline-flex;
+            display: inline-block;
         }
+    }
+}
+
+@media (max-width:750px) {
+    .article-list-item{
+        flex-direction: column;
+        height: 420px;
+    }
+    .article-list-item .el-image{
+        width: 75%;
+        height: 50%;
+        margin-top:5%;
+    }
+    .article-list-item .txt{
+        align-items: center;
+        width: 90%;
+        margin-left: 0px;
+    }
+    .article-list-item .txt >*{
+        text-align: center;
     }
 }
 

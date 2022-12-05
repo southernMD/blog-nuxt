@@ -10,6 +10,7 @@ export const useSkin = (op:string)=>{
         document.getElementsByTagName('body')[0].style.setProperty('--splitColor', `#222`);
         document.getElementsByTagName('body')[0].style.setProperty('--fontColorHover', `#111`);
         document.getElementsByTagName('body')[0].style.setProperty('--boxShString', `0 0 25px #333`);
+        document.getElementsByTagName('body')[0].style.setProperty('--md-color', `#666`);
         
         
     }else if(op == 'dark'){
@@ -23,5 +24,6 @@ export const useSkin = (op:string)=>{
         document.getElementsByTagName('body')[0].style.setProperty('--splitColor', `#aeaeae`);
         document.getElementsByTagName('body')[0].style.setProperty('--fontColorHover', `#9e9e9e`);
         document.getElementsByTagName('body')[0].style.setProperty('--boxShString', `0 0 25px #f4f5f5`);
+        document.getElementsByTagName('body')[0].style.setProperty('--md-color', `#bebebe`);
     }
 }

@@ -40,6 +40,7 @@ const goSearch = ()=>{
     margin: 0 auto;
     margin-top: 120px;
     max-width: 1400px;
+    scroll-behavior: smooth;
     .left-bk{
         display: none;
     }
@@ -57,14 +58,14 @@ const goSearch = ()=>{
         flex-direction: column;
     }
 
-    :deep(.el-input) {
+    .el-input {
         background: none;
         margin-bottom: 20px;
         width: 280px;
         border-radius: @border-ra;
         height: 50px;
 
-        .el-input__wrapper {
+        :deep(.el-input__wrapper) {
             border-radius: @border-ra;
             width: 280px;
             height: 50px;
