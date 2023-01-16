@@ -3,12 +3,12 @@
     <NuxtLayout name="container">
       <template #left>
         <!-- <Transition name="switch"> -->
-          <Component :is="comps[flag]" :directory="flag == 2 ? directory : undefined "></Component>
+          <Component :is="comps[flag]"></Component>
         <!-- </Transition> -->
       </template>
       <template #option>
         <div class="option">
-          <div v-for="(val, index) in tags" @click="change(index)" :class="{ active: flag == index }" :key="index">{{tags[index]}}
+          <div v-for="(val, index) in tagslen" @click="change(index)" :class="{ active: flag == index }" :key="index">{{tags[index]}}
           </div>
         </div>
       </template>
@@ -29,21 +29,23 @@ const MyMessage = resolveComponent('MyMessage')
 const TagList = resolveComponent('TagList')
 const Directory = resolveComponent('Directory')
 const comps = shallowRef([MyMessage, TagList,Directory])
-const tags = ref(['站点信息', '标签云'])
+const tags = ref(['站点信息', '标签云','目录'])
+const tagslen = ref(2)
 let flag = ref(0)
 const change = (num: number) => {
   flag.value = num;
 }
 
-const props = defineProps<{
-  directory?:any
-}>()
-
-if(props.directory != undefined){
-  tags.value.push('目录')
-  flag.value = 2
-}
-
+const directory = toRef(AppPinia,'directory')
+watch(directory,()=>{
+    if(directory.value == -1){
+        flag.value = 0
+        tagslen.value = 2
+    }else{
+        flag.value = 2
+        tagslen.value = 3
+    }
+},{immediate:true})
 </script>
   
 <style scoped lang="less">

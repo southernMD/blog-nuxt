@@ -11,6 +11,9 @@ console.log('当前环境：', envData)
 
 export default defineNuxtConfig({
     css:['@/assets/base.css','element-plus/dist/index.css'],
+    devServer:{
+
+    },
     build: {
         transpile: ['element-plus/es'],
     },

@@ -1,140 +1,126 @@
 <template>
-  <BaseLook :componentList="['MyMessage', 'TagList', 'Directory']" :tagsName="['站点信息', '标签云', '目录']"
-    :directory="`${id}`">
-    <template #right>
-      <div class="img" draggable="false">
-        <el-image :src="msg.imgUrl" fit="cover" draggable="false"></el-image>
-        <div class="msg">
-          <div class="title" @click.stop>
-            {{ msg.title }}
-          </div>
-          <div class="icons" @click.stop>
-            <div class="time">
-              <el-icon>
-                <Calendar />
-              </el-icon>
-              <span>{{ msg.time }}</span>
-              &nbsp;|
-            </div>
-            <div class="pl">
-              <el-icon>
-                <ChatDotRound />
-              </el-icon>
-              <span>{{ msg.comments }}</span>
-              &nbsp;|
-            </div>
-            <div class="see">
-              <el-icon>
-                <View />
-              </el-icon>
-              <span>{{ msg.click }}</span>
-            </div>
-            <div class="tags">
-              <el-tag size="small" v-for="(val, index) in (tags)" :key="index">{{ val }}</el-tag>
-            </div>
-          </div>
-          <div class="title2" v-show="true" @click.stop>
-            {{ msg.title2 }}
-          </div>
+  <Head>
+    <Title>南山有壶酒-文章-{{ss.msg?.title}}</Title>
+    <!-- <Meta name="description" :content="ss.msg?.title+ss.msg?.title2"></Meta> -->
+  </Head>
+  <div class="img" draggable="false">
+    <el-image :src="ss.msg?.imgUrl" fit="cover" draggable="false"></el-image>
+    <div class="msg">
+      <div class="title" @click.stop>
+        {{ ss?.msg.title }}
+      </div>
+      <div class="icons" @click.stop>
+        <div class="time">
+          <el-icon>
+            <Calendar />
+          </el-icon>
+          <span>{{ ss.msg?.time }}</span>
+          &nbsp;|
+        </div>
+        <div class="pl">
+          <el-icon>
+            <ChatDotRound />
+          </el-icon>
+          <span>{{ ss.msg?.comments }}</span>
+          &nbsp;|
+        </div>
+        <div class="see">
+          <el-icon>
+            <View />
+          </el-icon>
+          <span>{{ ss.msg?.click }}</span>
+        </div>
+        <div class="tags">
+          <el-tag size="small" v-for="(val, index) in (ss.tags)" :key="index">{{ val }}</el-tag>
         </div>
       </div>
-      <div class="md-editor-bk">
-        <md-editor v-model="Text" preview-only :theme="theme" editorId="MD" />
+      <div class="title2" v-show="true" @click.stop>
+        {{ ss.msg?.title2 }}
       </div>
-      <div class="comment">
-        <div class="title">评论</div>
-        <el-divider></el-divider>
-        <div class="line" v-for="(val, index) in 3" :class="{ 'line-none': must[index] }">
-          <div class="detail">{{ inptsDetail[index] }}</div>
-          <el-input v-model="inpts[index]" :placeholder="placeholder[index]"></el-input>
-        </div>
-        <div class="txt" :class="{ 'txt-none': must[3] }">
-          <div class="detail">评论</div>
-          <el-input v-model="inpts[3]" :rows="4" type="textarea" placeholder="说点什么" resize="none" />
-        </div>
-        <el-button type="success" @click="submit">提交评论</el-button>
-      </div>
-    </template>
-  </BaseLook>
+    </div>
+  </div>
+  <div class="md-editor-bk">
+    <md-editor v-model="ss.Text" preview-only :theme="theme" editorId="MD" />
+  </div>
+  <div class="cc">
+    <p>标题：{{ss.msg?.title}}</p>
+    <p>作者：southernMD</p>
+    <p>发布于：<a :href="href">{{href}}</a></p>
+  </div>
+  <MyForm :article_id="+ss.id"></MyForm>
+  <div class="comment-list">
+    <CommentList :list="ss.list"></CommentList>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { useApp } from '~~/stores';
+import { useApp,useOneArticle } from '~~/stores';
 import { Ref } from 'vue';
 import MdEditor, { Themes } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { Calendar, ChatDotRound, View } from '@element-plus/icons-vue';
-import { ElImage, ElIcon, ElTag, ElDivider, ElInput, ElButton, ElMessage } from 'element-plus';
-import { fa } from 'element-plus/es/locale';
+import { ElImage, ElIcon, ElTag, ElDivider, ElInput, ElButton, ElMessage, ElForm, ElFormItem, FormRules, FormInstance } from 'element-plus';
 const MdCatalog = MdEditor.MdCatalog;
-const route = useRoute();
+const $route = useRoute()
+const $router = useRouter()
 const AppPinia = useApp()
-const id = ref(route.params.id) as Ref<string>;
-const article = await useGetArticle(id.value)
-const msg = article.result[0] as ArticleObj
-const Text = ref(msg.text)
+const OneArticle = useOneArticle()
+// const id = ref(0) as Ref<number>;
+// const article:Ref<any> = ref()
+// const msg:Ref<any> = ref()
+// const Text = ref()
+// const tags = ref()
+const ss = reactive<{
+  id:any,
+  article:any,
+  msg:any,
+  Text:any,
+  tags:any,
+  list:any
+}>({
+  id:toRef(OneArticle.ss,'id'),
+  article:toRef(OneArticle.ss,'article'),
+  msg:toRef(OneArticle.ss,'msg'),
+  Text:toRef(OneArticle.ss,'Text'),
+  tags:toRef(OneArticle.ss,'tags'),
+  list:toRef(OneArticle.ss,'list')
+})
+
+onMounted(async()=>{
+  console.log($route.params.id);
+  ss.id = +$route.params.id
+  ss.article = await useGetArticle(ss.id,AppPinia)
+  if(ss.article){
+    if(ss.article.result.length == 0){
+      $router.push({
+        path:'404'
+      })
+    }
+    ss.msg = ss.article.result[0] as ArticleObj
+    ss.Text = ss.msg.text
+    ss.tags = ss.msg.tags.length == 0 ? [] : ss.msg.tags.split(',')
+  }
+  ss.list = (await useGetArticleComment(ss.id)).result
+})
 const theme = toRef(AppPinia, 'theme') as Ref<Themes>
 // const scrollElement = document?.documentElement;
-const inptsDetail = ref(['昵称', '邮箱', '网站'])
-const inpts = ref(['', '', '', ''])
-const must = ref([false, false, false, false])
-const placeholder = ref(['输入你的昵称', '不填写将收不到回复', '可选'])
-const tags = msg.tags.length == 0 ? [] : msg.tags.split(',')
 
-watch(inpts, () => {
-  if (inpts.value[0] != '') {
-    must.value[0] = false
-  }
-  if (inpts.value[3] != '') {
-    must.value[3] = false
-  }
-}, { deep: true })
+AppPinia.toTopFlagim = true
 
-const suo = ref(true)
-const submit = async () => {
-  if (suo.value) {
-    suo.value = false
-    let flag = true
-    if (inpts.value[0] == '') {
-      must.value[0] = true
-      flag = false
-    } else {
-      must.value[0] = false
-    }
-    if (inpts.value[3] == '') {
-      must.value[3] = true
-      flag = false
-    } else {
-      must.value[3] = false
-    }
-    if (flag == false) {
-      ElMessage({
-        message: '请填写必填项',
-        type: 'error',
-        onClose() {
-          suo.value = true
+const href = ref('')
+onMounted(() => {
+  setTimeout(() => {
+    const hash = window.location.hash;
+    href.value = window.location.href
+    if(hash){
+        const dom = document.querySelector(hash)
+        if(dom){
+            dom.scrollIntoView()
         }
-      })
-    }else{
-      const obj = {
-        nickname:inpts.value[0],
-        email:inpts.value[1],
-        _host:inpts.value[2],
-        _text:inpts.value[3],
-        article_id:+id.value,
-        parent_id:null
-      }
-      try {
-        const result =  await usePostComment(obj)
-        console.log(result);
-      } catch (error) {
-        console.log(error);
-      }
-      flag = true
     }
-  }
+  })
+})
 
-}
 </script>
 
 <style scoped lang="less">
@@ -248,121 +234,23 @@ span::-moz-selection {
   background-color: @background-color-op;
 }
 
-.comment {
-  width: 100%;
-  height: 400px;
+.cc{
   background-color: @background-color-op;
-  border-radius: @border-ra;
+  height: 60px;
+  width: 100%;
   margin-top: 10px;
-  color: @font-color;
-
-  .title {
-    font-size: 18px;
-    display: flex;
-    height: 40px;
-    line-height: 40px;
-    margin-left: 20px;
+  border-radius: @border-ra;
+  display: flex;
+  align-items: center;
+  color:@font-color;
+  a{
+  color:@font-color;
   }
-
-  .el-divider {
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 0;
-    width: 99%;
-  }
-
-  .line {
-    display: flex;
-    height: 30px;
-    line-height: 30px;
-    margin-bottom: 20px;
-    margin-left: 20px;
-
-    :deep(.el-input) {
-      height: 30px;
-      background: none;
-      margin-bottom: 20px;
-      width: 280px;
-      border-radius: @border-ra;
-
-      .el-input__wrapper {
-        height: 30px;
-        background-color: @background-color-op;
-      }
-
-      input {
-        color: @font-color;
-      }
-    }
-
-    .detail {
-      height: 30px;
-      margin-right: 10px;
-      user-select: none;
-    }
-  }
-
-  .line-none {
-    :deep(.el-input__wrapper) {
-      box-shadow: 0 0 0 1px red;
-    }
-  }
-
-  .txt {
-    width: 80%;
-    margin-left: 20px;
-    display: flex;
-
-    .detail {
-      width: 55px;
-    }
-
-    .detail::before {
-      content: '*';
-      color: red;
-      margin-right: 5px;
-    }
-
-    :deep(.el-textarea) {
-      background-color: @background-color-op;
-
-      textarea {
-        box-sizing: border-box;
-        background: none !important;
-        color: @font-color;
-      }
-    }
-  }
-
-  .txt-none {
-    :deep(.el-textarea__inner) {
-      box-shadow: 0 0 0 1px red;
-    }
-  }
-
-  .el-button {
-    margin-left: 20px;
-    margin-top: 20px;
-    background-color: rgb(102, 204, 255);
-    border: none;
-
-    &:hover {
-      background-color: rgba(102, 204, 255, .8);
-    }
+  p{
+    margin: 10px 10px;
   }
 }
-
-
-.comment .line .detail::before {
-  content: ' ';
-  white-space: pre;
-  color: red;
-  margin-right: 7px;
-}
-
-.comment .line:nth-of-type(3) .detail::before {
-  content: '*';
-  color: red;
-  margin-right: 5px;
+.comment-list {
+  width: 100%;
 }
 </style>

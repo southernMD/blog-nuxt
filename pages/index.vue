@@ -14,7 +14,11 @@
     <NuxtLayout name="maintemplate">
         <template #default>
             <el-scrollbar ref="scrollbarRef" @scroll="barScroll">
-                <LazyNuxtPage></LazyNuxtPage>
+                <BaseLook>
+                    <template #right>
+                        <LazyNuxtPage></LazyNuxtPage>
+                    </template>
+                </BaseLook>
             </el-scrollbar>
         </template>
     </NuxtLayout>
@@ -25,23 +29,40 @@ import { ElScrollbar } from 'element-plus';
 import { useApp } from '@/stores'
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 const AppPinia = useApp()
+const $route = useRoute()
 let toTopFlag = toRef(AppPinia, 'toTopFlag')
+let toTopFlagim = toRef(AppPinia, 'toTopFlagim')
 let scrollbarVal = toRef(AppPinia, 'scrollbarVal')
 let windowWidth = toRef(AppPinia, 'windowWidth')
 
 watch(toTopFlag, () => {
     if (toTopFlag.value == true) {
-        goToTop()
+        goToTop("smooth")
     }
     toTopFlag.value = false
 })
 
-const goToTop = () => {
+watch(toTopFlagim, () => {
+    if (toTopFlagim.value == true) {
+        goToTop("instant")
+    }
+    toTopFlagim.value = false
+})
+
+const goToTop = (behavior:string) => {
+    console.log('behaviorbehaviorbehavior',behavior);
     scrollbarRef.value!.scrollTo({
         top: 0,
-        behavior: "smooth"
+        behavior
     })
 }
+const path2 = toRef($route,'path')
+watch(path2,()=>{
+    console.log(path2);
+    setTimeout(()=>{
+        scrollbarRef.value?.update()
+    })
+})
 
 const barScroll = (scrollObj: any) => {
     // console.log(scrollObj.scrollTop);
@@ -50,9 +71,9 @@ const barScroll = (scrollObj: any) => {
 </script>
 
 <style lang="less">
-.el-scrollbar__thumb {
-    display: none;
-}
+// .el-scrollbar__thumb {
+//     display: none;
+// }
 
 .el-drawer__body {
     padding: 0 !important;
@@ -78,28 +99,7 @@ const barScroll = (scrollObj: any) => {
         width: 100% !important;
     }
     .el-input {
-        background: none;
-        margin-bottom: 10px;
-        width: 100%;
-        border-radius: @border-ra;
-        margin-top:5px ;
-        .el-input__wrapper {
-            border-radius: @border-ra;
-            width: 100%;
-            box-shadow: none !important;
-            background-color: @background-color-op;
-
-            input {
-                width: 100%;
-                color: @font-color;
-                font-size: 14px;
-
-                &::placeholder {
-                    color: @font-color;
-                    opacity: 0.4;
-                }
-            }
-        }
+        width: 100% !important;
     }
 
     &::before {

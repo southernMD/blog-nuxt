@@ -1,8 +1,14 @@
-import { useApp } from '@/stores'
+import { useApp,useOneArticle } from '@/stores'
 
 export default defineNuxtRouteMiddleware((to, from) => {
-    console.log(to.path);
+    console.log(to.path,from.path);
     const AppPinia = useApp()
+    const oneArticle = useOneArticle()
+    console.log('我是文章的id',to.params.id);
+    AppPinia.articleId = +to.params.id
+    if(to.path !== from.path){
+        oneArticle.init()
+    }
     switch (to.path) {
         case '/':
             AppPinia.activeBlock = '首页'
@@ -11,7 +17,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
             AppPinia.activeBlock = '文章'
             break;
         case '/board':
-            AppPinia.activeBlock = '留言版'
+            AppPinia.activeBlock = '留言板'
             break;
         case '/experiment':
             AppPinia.activeBlock = '实验室'
@@ -23,5 +29,13 @@ export default defineNuxtRouteMiddleware((to, from) => {
             AppPinia.activeBlock = '关于'
             break;
     }
-    if(to.path.includes('articles'))AppPinia.activeBlock = '文章'
+    if(to.path.includes('articles') && to.params.id == undefined){
+        AppPinia.directory = -1
+    }else if(to.path.includes('articles')){
+        AppPinia.activeBlock = '文章'
+        AppPinia.directory = Number(to.params.id)
+    }else if(!to.path.includes('articles')){
+        AppPinia.directory = -1
+    }
+    AppPinia.SearchDrawerFlag = false
 })

@@ -1,11 +1,7 @@
 <template>
     <div class="main" draggable="false">
         <div class="left-bk" :class="{ 'left-f': scrollbarVal > 100 }">
-            <el-input v-model="searchVal" placeholder="search in station ..." @keydown.enter="goSearch">
-                <template #suffix>
-                    <i class="iconfont icon-search" style="font-size:18px;cursor: pointer;" @click.self="goSearch"></i>
-                </template>
-            </el-input>
+            <my-search-input></my-search-input>
             <div class="left">
                 <slot name="left"></slot>
                 <slot name="option"></slot>
@@ -56,34 +52,6 @@ const goSearch = ()=>{
         position: relative;
         display: flex;
         flex-direction: column;
-    }
-
-    .el-input {
-        background: none;
-        margin-bottom: 20px;
-        width: 280px;
-        border-radius: @border-ra;
-        height: 50px;
-
-        :deep(.el-input__wrapper) {
-            border-radius: @border-ra;
-            width: 280px;
-            height: 50px;
-            box-shadow: none !important;
-            background-color: @background-color-op;
-
-            input {
-                width: 280px;
-                color: @font-color;
-                height: 50px;
-                font-size: 18px;
-
-                &::placeholder {
-                    color: @font-color;
-                    opacity: 0.4;
-                }
-            }
-        }
     }
 
     .left-none {

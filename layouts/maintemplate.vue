@@ -2,7 +2,7 @@
     <div class="maintemplate">
 
         <Head>
-            <Link rel="stylesheet" href="//at.alicdn.com/t/c/font_3736505_oh3rlks2ki.css">
+            <Link rel="stylesheet" href="//at.alicdn.com/t/c/font_3736505_cc1y8em43d.css">
             </Link>
             <Link rel="icon" href="/favicon.ico">
             </Link>
@@ -36,17 +36,12 @@
                                 </div>
                             </div>
                         </el-drawer>
-                        <el-drawer v-model="SearchDrawerFlag" :append-to-body="true" :show-close="false"
-                            :with-header="false" direction="ltr" size="70%" destroy-on-close >
+                        <el-drawer v-if="!$route.path.includes('years')" v-model="SearchDrawerFlag"
+                            :append-to-body="true" :show-close="false" :with-header="false" direction="ltr" size="70%"
+                            destroy-on-close>
                             <el-scrollbar>
                                 <div id="left-drawer">
-                                    <el-input v-model="searchVal" placeholder="search in station ..."
-                                        @keydown.enter="goSearch">
-                                        <template #suffix>
-                                            <i class="iconfont icon-search" style="font-size:18px;cursor: pointer;"
-                                                @click.self="goSearch"></i>
-                                        </template>
-                                    </el-input>
+                                    <my-search-input></my-search-input>
                                     <Component :is="comps[flag]">
                                     </Component>
                                     <div class="option">
@@ -121,20 +116,24 @@
                 </el-icon>
             </div>
         </transition>
-
+        <transition name="auth">
+            <div class="auth" v-show="scrollbarVal < 100" @click="admit">
+                <span>a</span>
+            </div>
+        </transition>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router';
-import { ElDrawer, ElButton, ElIcon, ElInput, ElScrollbar } from 'element-plus'
+import { ElDrawer, ElButton, ElIcon, ElInput, ElScrollbar, ElMessageBox, ElMessage } from 'element-plus'
 import { ArrowLeftBold, ArrowRightBold, Sunny, Moon, Hide, CaretLeft, CaretRight, Top } from '@element-plus/icons-vue'
 import { useApp } from '@/stores/index'
 const $router = useRouter()
 const $route = useRoute()
 const AppPinia = useApp()
-const navArr = ['首页', '文章', '留言版', '实验室', '十年', '关于'];
+const navArr = ['首页', '文章', '留言板', '实验室', '十年', '关于'];
 const navicons = ['icon-shouye', 'icon-wenzhang', 'icon-liuyan', 'icon-flask', 'icon-zhiwu', 'icon-guanyu']
 let theme = toRef(AppPinia, 'theme')
 let drawerFlag = ref(false)
@@ -144,40 +143,32 @@ const MyMessage = resolveComponent('MyMessage')
 const TagList = resolveComponent('TagList')
 const Directory = resolveComponent('Directory')
 const comps = shallowRef([MyMessage, TagList, Directory])
-const tags = ref(['站点信息', '标签云','目录'])
+const tags = ref(['站点信息', '标签云', '目录'])
 let tagslen = ref(2)
 let flag = ref(0)
 const change = (num: number) => {
     flag.value = num;
 }
-const path2 = toRef($route, 'path');
-watch(path2, () => {
-    console.log(tags.value);
-    if (path2.value.includes('articles')) {
-        const arr = path2.value.split('/');
-        if (arr.length == 3) {
-            console.log('执行1');
-            tagslen.value = 3
-            flag.value = 2
-        } else if (arr.length == 2) {
-            console.log('执行2');
-            flag.value = 0
-            tagslen.value = 2
-        }
+const directory = toRef(AppPinia, 'directory')
+watch(directory, () => {
+    console.log(directory.value, 'asdsadas&&%$$##&&');
+    if (directory.value == -1) {
+        console.log('directory是-1');
+        flag.value = 0
+        tagslen.value = 2
     } else {
-        if (tags.value.length == 3) {
-            console.log('执行3');
-            flag.value = 0
-            tagslen.value = 2
-        }
+        console.log('directory是其他');
+        flag.value = 2
+        tagslen.value = 3
     }
-})
+}, { immediate: true })
 
 
 let activeBlock = toRef(AppPinia, 'activeBlock');
 const go = (path: string) => {
     let p = ''
     drawerFlag.value = false
+    console.log(path);
     activeBlock.value = path
     switch (path) {
         case '首页':
@@ -186,7 +177,7 @@ const go = (path: string) => {
         case '文章':
             p = '/articles'
             break;
-        case '留言版':
+        case '留言板':
             p = '/board'
             break;
         case '实验室':
@@ -229,17 +220,12 @@ const showDrawer = () => {
     console.log(drawerFlag.value);
 }
 
-let SearchDrawerFlag = ref(false)
+const SearchDrawerFlag = toRef(AppPinia, 'SearchDrawerFlag')
 const showSearchDrawer = () => {
     SearchDrawerFlag.value = true
 }
 
-let searchVal = ref('')
 
-const goSearch = () => {
-    console.log(searchVal.value);
-    searchVal.value = ''
-}
 
 let optionDirectionFlag = toRef(AppPinia, 'optionDirectionFlag')
 onMounted(() => {
@@ -280,6 +266,43 @@ const handleHideOption = () => {
 
 const goToTop = () => {
     AppPinia.toTopFlag = true
+}
+
+const dialogVisible = ref(false)
+const admit = () => {
+    ElMessageBox.prompt('输入验证码', '认证', {
+        confirmButtonText: '提交',
+        cancelButtonText: '取消',
+        inputPattern:
+            /^[0-9a-zA-z]+$/,
+        inputErrorMessage: 'Invalid',
+        beforeClose: async(action, instance, done) => {
+            if (action === 'confirm') {
+                instance.confirmButtonLoading = true
+                instance.confirmButtonText = 'Loading...'
+                const password = instance.inputValue
+                const result = await usePostAdmit(password)
+                if(result.status == 201){
+                    ElMessage({
+                        type: 'error',
+                        message: 'Input canceled',
+                    })
+                }else if(result.status == 200){
+                    localStorage.setItem('token',result.token)
+                    ElMessage({
+                        type: 'success',
+                        message: `Your `,
+                        onClose(){
+                            location.reload()
+                        }
+                    })
+                }
+                done()
+            } else {
+                done()
+            }
+        }
+    })
 }
 
 </script>
@@ -536,6 +559,25 @@ const goToTop = () => {
         border-top-right-radius: @border-ra;
         border-bottom-right-radius: @border-ra;
     }
+
+    .auth {
+        position: fixed;
+        top: 70px;
+        right: 20px;
+        height: 30px;
+        width: 30px;
+        background-color: @background-color;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        span {
+            user-select: none;
+            color: @font-color;
+            cursor: pointer;
+        }
+    }
 }
 
 .nav-list-phone {
@@ -675,5 +717,41 @@ const goToTop = () => {
 //离开完成
 .sm-option-leave-to {
     opacity: 0 !important;
+}
+
+
+
+
+
+
+
+//开始过度
+.auth-enter-from {
+    transform: translateX(100px);
+}
+
+//开始过度了
+.auth-enter-active {
+    transition: all .2s linear;
+}
+
+//过度完成
+.auth-enter-to {
+    transform: translateX(0);
+}
+
+//离开的过度
+.auth-leave-from {
+    transform: translateX(0);
+}
+
+//离开中过度
+.auth-leave-active {
+    transition: all .2s linear;
+}
+
+//离开完成
+.auth-leave-to {
+    transform: translateX(100px);
 }
 </style>

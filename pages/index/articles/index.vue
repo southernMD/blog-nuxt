@@ -1,27 +1,31 @@
 <template>
-    <BaseLook :componentList="['MyMessage', 'TagList']" :tagsName="['站点信息', '标签云']">
-        <template #right>
-            <div class="article">
-                <div class="search-block" v-show="false"></div>
-                <div class="article-list">
-                    <ArticleItem v-for="(val, index) in ArticlesList" :key="val.id"
-                        :ArticlesList="ArticlesList[index]" />
-                </div>
-                <el-pagination background layout="prev, pager, next" :page-count="total"
-                    v-model:currentPage="nowPage" />
-            </div>
-        </template>
-    </BaseLook>
+    <div class="article">
+        <div class="search-block" v-show="false"></div>
+        <div class="article-list">
+            <ArticleItem v-for="(val, index) in ArticlesList" :key="val.id"
+                :ArticlesList="ArticlesList[index]" />
+        </div>
+        <el-pagination background layout="prev, pager, next" :page-count="total"
+            v-model:currentPage="nowPage" />
+    </div>
 </template>
   
 <script setup lang="ts">
 import { ElPagination } from 'element-plus';
-const HttpRequestArticlesList = await useGetArticlesList(1, 5) as ArticleListHttp<ArticleObj[]>
-const ArticlesList = ref(HttpRequestArticlesList.result as ArticleObj[])
-const total = ref(HttpRequestArticlesList.totalPages)
-const nowPage = ref(1)
+import {Ref} from 'vue'
+import { useApp,useOneArticle } from '~~/stores';
+const AppPinia = useApp()
+const OneArticle = useOneArticle()
+const ArticlesList = toRef(AppPinia,'ArticlesList') as unknown as Ref<ArticleObj[]>
+const total = toRef(OneArticle.ss,'totalPages')
+onMounted(async()=>{
+    const HttpRequestArticlesList = await useGetArticlesList(1, 5,'',0) as ArticleListHttp<ArticleObj[]>
+    ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
+    total.value = HttpRequestArticlesList.totalPages
+})
+const nowPage = toRef(OneArticle.ss,'nowPage')
 watch(nowPage, async () => {
-    const HttpRequestArticlesList = await useGetArticlesList(nowPage.value, 5) as ArticleListHttp<ArticleObj[]>
+    const HttpRequestArticlesList = await useGetArticlesList(nowPage.value, 5,'',0) as ArticleListHttp<ArticleObj[]>
     ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
 })
 </script>
