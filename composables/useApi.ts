@@ -96,3 +96,11 @@ export const useGetToken = async()=>{
         resolve(result)
     })
 }
+
+//基本信息
+export const useGetBaseMessage = async()=>{
+    let result = await Http.get(`/show/base`)
+        return new Promise<ResOptions<any>>((resolve, reject) => {
+        resolve(result)
+    })
+}

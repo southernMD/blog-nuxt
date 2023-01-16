@@ -32,7 +32,11 @@ export default defineNuxtRouteMiddleware((to, from) => {
     if(to.path.includes('articles') && to.params.id == undefined){
         AppPinia.directory = -1
     }else if(to.path.includes('articles')){
-        AppPinia.activeBlock = '文章'
+        if(from.path.includes('years')){
+            AppPinia.activeBlock = '十年'
+        }else{
+            AppPinia.activeBlock = '文章'
+        }
         AppPinia.directory = Number(to.params.id)
     }else if(!to.path.includes('articles')){
         AppPinia.directory = -1

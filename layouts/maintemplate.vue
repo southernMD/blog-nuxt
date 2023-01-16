@@ -125,11 +125,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref,Ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router';
 import { ElDrawer, ElButton, ElIcon, ElInput, ElScrollbar, ElMessageBox, ElMessage } from 'element-plus'
 import { ArrowLeftBold, ArrowRightBold, Sunny, Moon, Hide, CaretLeft, CaretRight, Top } from '@element-plus/icons-vue'
 import { useApp } from '@/stores/index'
+import { f } from 'ohmyfetch/dist/error-65d5de49';
 const $router = useRouter()
 const $route = useRoute()
 const AppPinia = useApp()
@@ -165,7 +166,10 @@ watch(directory, () => {
 
 
 let activeBlock = toRef(AppPinia, 'activeBlock');
-const go = (path: string) => {
+const ArticlesListYear  = toRef(AppPinia,'ArticlesListYear') as unknown as Ref<ArticleObj[]>
+const ArticlesList  = toRef(AppPinia,'ArticlesList') as unknown as Ref<ArticleObj[]>
+const total = toRef(AppPinia,'totalPages')
+const go = async(path: string) => {
     let p = ''
     drawerFlag.value = false
     console.log(path);
@@ -189,6 +193,16 @@ const go = (path: string) => {
         case '关于':
             p = '/about'
             break;
+    }
+    if($route.path.includes(p) && (p == '/years' || p == '/articles')){
+        const flag = p == '/years'?1:0
+        const HttpRequestArticlesList = await useGetArticlesList(1, 5,'',flag) as ArticleListHttp<ArticleObj[]>
+        if(flag == 1){
+            ArticlesListYear.value = HttpRequestArticlesList.result as ArticleObj[]
+        }else{
+            ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
+        }
+        total.value = HttpRequestArticlesList.totalPages
     }
     $router.push({
         path: p

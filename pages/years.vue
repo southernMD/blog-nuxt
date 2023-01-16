@@ -28,7 +28,7 @@
               </el-scrollbar>
             </template>
             <template #right>
-              <div class="search-block" v-show="false"></div>
+              <div class="search-block" v-show="$route.query.searchType"></div>
               <div class="article-list">
                 <ArticleItem v-for="(val, index) in ArticlesList" :key="val.id" :ArticlesList="ArticlesList[index]" />
               </div>
@@ -61,8 +61,10 @@
 <script setup lang="ts">
 import { ElDrawer, ElScrollbar, ElPagination } from 'element-plus'
 import { Ref} from 'vue'
-import { useApp } from '~~/stores';
+import { useApp,useOneArticle } from '~~/stores';
 const AppPinia = useApp()
+const OneArticle = useOneArticle()
+
 const SearchDrawerFlag = toRef(AppPinia, 'SearchDrawerFlag')
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 const $route = useRoute()
@@ -70,6 +72,7 @@ let toTopFlag = toRef(AppPinia, 'toTopFlag')
 let toTopFlagim = toRef(AppPinia, 'toTopFlagim')
 let scrollbarVal = toRef(AppPinia, 'scrollbarVal')
 let windowWidth = toRef(AppPinia, 'windowWidth')
+// const searchFlag = toRef(AppPinia,'searchFlag')
 
 watch(toTopFlag, () => {
   if (toTopFlag.value == true) {
@@ -105,16 +108,22 @@ watch(path2, () => {
   })
 })
 const ArticlesList  = toRef(AppPinia,'ArticlesListYear') as unknown as Ref<ArticleObj[]>
-const total = ref()
+const total = toRef(AppPinia,'totalPages')
+
 onMounted(async()=>{
-  const HttpRequestArticlesList = await useGetArticlesList(1, 5,'',1) as ArticleListHttp<ArticleObj[]>
-  ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
-  total.value = HttpRequestArticlesList.totalPages
+  if(!$route.query.searchType){
+    const HttpRequestArticlesList = await useGetArticlesList(1, 5,'',1) as ArticleListHttp<ArticleObj[]>
+    ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
+    total.value = HttpRequestArticlesList.totalPages
+  }
 })
-const nowPage = ref(1)
+const nowPage = toRef(AppPinia,'nowPage')
+
 watch(nowPage, async () => {
-  const HttpRequestArticlesList = await useGetArticlesList(nowPage.value, 5, '', 1) as ArticleListHttp<ArticleObj[]>
-  ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
+  if(!$route.query.searchType){
+    const HttpRequestArticlesList = await useGetArticlesList(nowPage.value, 5, '', 1) as ArticleListHttp<ArticleObj[]>
+    ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
+  }
 })
 
 

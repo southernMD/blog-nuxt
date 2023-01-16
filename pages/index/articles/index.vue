@@ -1,6 +1,6 @@
 <template>
     <div class="article">
-        <div class="search-block" v-show="false"></div>
+        <div class="search-block" v-show="$route.query.searchType"></div>
         <div class="article-list">
             <ArticleItem v-for="(val, index) in ArticlesList" :key="val.id"
                 :ArticlesList="ArticlesList[index]" />
@@ -17,16 +17,23 @@ import { useApp,useOneArticle } from '~~/stores';
 const AppPinia = useApp()
 const OneArticle = useOneArticle()
 const ArticlesList = toRef(AppPinia,'ArticlesList') as unknown as Ref<ArticleObj[]>
-const total = toRef(OneArticle.ss,'totalPages')
+const total = toRef(AppPinia,'totalPages')
+// const searchFlag = toRef(AppPinia,'searchFlag')
+const $route = useRoute()
+const $router = useRouter()
 onMounted(async()=>{
-    const HttpRequestArticlesList = await useGetArticlesList(1, 5,'',0) as ArticleListHttp<ArticleObj[]>
-    ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
-    total.value = HttpRequestArticlesList.totalPages
+    if(!$route.query.searchType){
+        const HttpRequestArticlesList = await useGetArticlesList(1, 5,'',0) as ArticleListHttp<ArticleObj[]>
+        ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
+        total.value = HttpRequestArticlesList.totalPages
+    }
 })
-const nowPage = toRef(OneArticle.ss,'nowPage')
+const nowPage = toRef(AppPinia,'nowPage')
 watch(nowPage, async () => {
-    const HttpRequestArticlesList = await useGetArticlesList(nowPage.value, 5,'',0) as ArticleListHttp<ArticleObj[]>
-    ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
+    if(!$route.query.searchType){
+        const HttpRequestArticlesList = await useGetArticlesList(nowPage.value, 5,'',0) as ArticleListHttp<ArticleObj[]>
+        ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
+    }
 })
 </script>
   

@@ -17,6 +17,8 @@ export const useApp = defineStore("app", {
       ArticlesListYear: null,
       articleId: -1,
       author: '',
+      totalPages:0,
+      nowPage:1,
       repaly: {
         user: '',
         text: '',
@@ -42,9 +44,8 @@ export const useOneArticle = defineStore("oneArticle", {
         Text: '',
         tags: [],
         list: [],
-        totalPages:0,
-        nowPage:1
-      }
+      },
+      tags_list:[]
     }
   },
   actions:{
@@ -55,9 +56,7 @@ export const useOneArticle = defineStore("oneArticle", {
         msg: {},
         Text: '',
         tags: [],
-        list: [],
-        totalPages:0,
-        nowPage:1
+        list: []
       }
     }
   },
