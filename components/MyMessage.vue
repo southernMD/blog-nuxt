@@ -41,8 +41,8 @@ import { Ref } from 'vue'
 import { useOneArticle } from '~~/stores';
 import { ElImage, ElAvatar, ElSkeleton } from 'element-plus';
 const imgObj = await useGetImage() as ResOptions<any>
-const result= (await useGetBaseMessage() as ResOptions<{base_message:{tags_number:number,gather_number:number,article_number:number},tags_list:string[]}>).result
-const {base_message,tags_list} = result as {base_message:{tags_number:number,gather_number:number,article_number:number},tags_list:string[]}
+const result= (await useGetBaseMessage() as ResOptions<{base_message:{tags_number:number,gather_number:number,article_number:number},tags_list:string[],tags_list_years:string[]}>).result
+const {base_message,tags_list,tags_list_years} = result as {base_message:{tags_number:number,gather_number:number,article_number:number},tags_list:string[],tags_list_years:string[]}
 const { public: { VITE_PACK_ENV } } = useRuntimeConfig() // 3.0正式版环境变量要从useRuntimeConfig里的public拿
 const OneArticle = useOneArticle()
 let imgSrc = ref() as Ref<ResOptions<any>>
@@ -53,6 +53,7 @@ if (VITE_PACK_ENV == 'build') {
 }
 const navMessage = ref([base_message.article_number,base_message.gather_number,base_message.tags_number])
 OneArticle.tags_list = tags_list as any
+OneArticle.tags_list_years = tags_list_years as any
 const navTitle = ['文章', '分类', '标签']
 const yiyan = await useGetYiYan()
 </script>

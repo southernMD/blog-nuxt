@@ -20,15 +20,20 @@
               <div class="title">分类</div>
               <el-scrollbar>
                 <ul class="list">
-                  <li v-for="val in 24">
-                    <span>tags </span>
-                    <span>(2)</span>
+                  <li v-for="val in taglist" @click="searchByTag(val)">
+                    <span>{{val}} </span>
+                  </li>
+                  <li v-show="taglist.length == 0" >
+                    <span style="cursor: default;">暂无内容</span>
                   </li>
                 </ul>
               </el-scrollbar>
             </template>
             <template #right>
-              <div class="search-block" v-show="$route.query.searchType"></div>
+              <div class="search-block" v-show="$route.query.searchType">
+                <span>{{$route.query.searchType === 'tag'?'标签搜索':'关键词搜索'}}</span>
+                <span>"{{$route.query.searchKey }}"</span>
+            </div>
               <div class="article-list">
                 <ArticleItem v-for="(val, index) in ArticlesList" :key="val.id" :ArticlesList="ArticlesList[index]" />
               </div>
@@ -48,8 +53,11 @@
       <div class="title">分类</div>
       <el-scrollbar>
         <ul class="list">
-          <li v-for="val in 24">
-            <span>tags(2) </span>
+          <li v-for="val in taglist">
+            <span>{{val}} </span>
+          </li>
+          <li v-show="taglist.length == 0" >
+            <span style="cursor: default;">暂无内容</span>
           </li>
         </ul>
       </el-scrollbar>
@@ -72,6 +80,7 @@ let toTopFlag = toRef(AppPinia, 'toTopFlag')
 let toTopFlagim = toRef(AppPinia, 'toTopFlagim')
 let scrollbarVal = toRef(AppPinia, 'scrollbarVal')
 let windowWidth = toRef(AppPinia, 'windowWidth')
+const taglist = toRef(OneArticle,'tags_list_years')
 // const searchFlag = toRef(AppPinia,'searchFlag')
 
 watch(toTopFlag, () => {
@@ -126,7 +135,20 @@ watch(nowPage, async () => {
   }
 })
 
-
+const $router = useRouter()
+const searchByTag = async(key:string)=>{
+    nowPage.value = 1
+    const HttpRequestArticlesList = await useGetArticlesList(1,5,key,2) as ArticleListHttp<ArticleObj[]>
+    ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
+    total.value = HttpRequestArticlesList.totalPages
+    $router.push({
+        path:'/years',
+        query:{
+            searchType:'tag',
+            searchKey:key
+        }
+    })
+}
 </script>
 
 <style scoped lang="less">
@@ -185,9 +207,19 @@ watch(nowPage, async () => {
 .search-block {
   width: 100%;
   height: 150px;
-  background: red;
+  background: @background-color-op;
   border-radius: @border-ra;
   margin-bottom: 20px;
+  display: flex;
+  justify-self: start;
+  align-items: center;
+  span:first-child{
+      margin-left: 20px;
+      font-size: 25px;
+  }
+  span:last-child{
+      font-size: 30px;
+  }
 }
 
 :deep(.el-pagination) {

@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@types/gravatar": "^1.8.3",
-    "nuxt": "3.0.0-rc.13",
+    "nuxt": "3.0.0",
     "unplugin-element-plus": "^0.4.1"
   },
   "dependencies": {

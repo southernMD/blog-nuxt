@@ -45,7 +45,8 @@ export const useOneArticle = defineStore("oneArticle", {
         tags: [],
         list: [],
       },
-      tags_list:[]
+      tags_list:[],
+      tags_list_years:[]
     }
   },
   actions:{

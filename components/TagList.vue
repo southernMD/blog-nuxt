@@ -47,7 +47,7 @@ const searchByTag = async(key:string)=>{
         ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
         totalPages.value = HttpRequestArticlesList.totalPages
         $router.push({
-            path:'articles',
+            path:'/articles',
             query:{
                 searchType:'tag',
                 searchKey:key

@@ -9,6 +9,7 @@
               {{ fatherArr[0].nickname }}</span></div>
           <div class="time">{{ showTime.get(message[index].id) }}</div>
         </div>
+        <div class="host" v-if="message[index].master == 1">博主</div>
       </div>
       <div class="txt-bk">
         <div class="txt">
@@ -160,6 +161,12 @@ const onCall = (message:any) => {
       .time {
         font-size: 13px;
       }
+    }
+    .host{
+      border: 1px solid @font-color;
+      padding: 2px 5px 2px 5px;
+      margin-left: 10px;
+      border-radius: @border-ra;
     }
   }
 

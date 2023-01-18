@@ -1,9 +1,15 @@
 <template>
     <div class="article">
-        <div class="search-block" v-show="$route.query.searchType"></div>
+        <div class="search-block" v-show="$route.query.searchType">
+            <span>{{$route.query.searchType === 'tag'?'标签搜索':'关键词搜索'}}</span>
+            <span>"{{$route.query.searchKey }}"</span>
+        </div>
         <div class="article-list">
             <ArticleItem v-for="(val, index) in ArticlesList" :key="val.id"
                 :ArticlesList="ArticlesList[index]" />
+            <div class="noData" v-show="ArticlesList.length == 0">
+                暂无内容
+            </div>
         </div>
         <el-pagination background layout="prev, pager, next" :page-count="total"
             v-model:currentPage="nowPage" />
@@ -41,9 +47,19 @@ watch(nowPage, async () => {
 .search-block {
     width: 100%;
     height: 150px;
-    background: red;
+    background: @background-color-op;
     border-radius: @border-ra;
     margin-bottom: 20px;
+    display: flex;
+    justify-self: start;
+    align-items: center;
+    span:first-child{
+        margin-left: 20px;
+        font-size: 25px;
+    }
+    span:last-child{
+        font-size: 30px;
+    }
 }
 
 .el-tag {
@@ -61,6 +77,17 @@ watch(nowPage, async () => {
     flex-direction: column;
     .article-list {
         width: 100%;
+        .noData{
+            width: 100%;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: @background-color-op;
+            border-radius: @border-ra;
+            margin-bottom: 20px;
+            font-size: 30px;
+        }
     }
 
     :deep(.el-pagination) {
