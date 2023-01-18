@@ -112,7 +112,7 @@ const total = toRef(AppPinia,'totalPages')
 
 onMounted(async()=>{
   if(!$route.query.searchType){
-    const HttpRequestArticlesList = await useGetArticlesList(1, 5,'',1) as ArticleListHttp<ArticleObj[]>
+    const HttpRequestArticlesList = await useGetArticlesList(nowPage.value, 5,'',1) as ArticleListHttp<ArticleObj[]>
     ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
     total.value = HttpRequestArticlesList.totalPages
   }

@@ -52,7 +52,6 @@ const props = defineProps<{
 }>()
 const tags =(props.ArticlesList as ArticleObj).tags.length == 0?[]:(props.ArticlesList as ArticleObj).tags.split(',')
 const vLazyDirective: Directive = (el: HTMLElement) => {
-    console.log(el);
     const observer = new IntersectionObserver(([{ isIntersecting }]) => {
         if (isIntersecting) {
             el.classList.add('article-list-item-show')

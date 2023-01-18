@@ -101,6 +101,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                     onClose() {
                         suo.value = true
                         repalyFlag.value = false
+                        OneArticle.ss.msg.comments++
                         location.reload()
                     }
                 })

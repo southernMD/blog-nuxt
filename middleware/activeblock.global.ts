@@ -8,6 +8,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     AppPinia.articleId = +to.params.id
     if(to.path !== from.path){
         oneArticle.init()
+        AppPinia.toTopFlagim = true
     }
     switch (to.path) {
         case '/':

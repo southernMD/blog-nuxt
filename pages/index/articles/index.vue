@@ -23,7 +23,7 @@ const $route = useRoute()
 const $router = useRouter()
 onMounted(async()=>{
     if(!$route.query.searchType){
-        const HttpRequestArticlesList = await useGetArticlesList(1, 5,'',0) as ArticleListHttp<ArticleObj[]>
+        const HttpRequestArticlesList = await useGetArticlesList(nowPage.value, 5,'',0) as ArticleListHttp<ArticleObj[]>
         ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
         total.value = HttpRequestArticlesList.totalPages
     }
