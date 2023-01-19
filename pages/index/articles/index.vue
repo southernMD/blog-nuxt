@@ -53,6 +53,7 @@ watch(nowPage, async () => {
     display: flex;
     justify-self: start;
     align-items: center;
+    color: @font-color;
     span:first-child{
         margin-left: 20px;
         font-size: 25px;
@@ -87,6 +88,7 @@ watch(nowPage, async () => {
             border-radius: @border-ra;
             margin-bottom: 20px;
             font-size: 30px;
+            color: @font-color;
         }
     }
 

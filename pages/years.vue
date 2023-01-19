@@ -24,7 +24,7 @@
                     <span>{{val}} </span>
                   </li>
                   <li v-show="taglist.length == 0" >
-                    <span style="cursor: default;">暂无内容</span>
+                    <span style="cursor: default; ">暂无内容</span>
                   </li>
                 </ul>
               </el-scrollbar>
@@ -33,9 +33,12 @@
               <div class="search-block" v-show="$route.query.searchType">
                 <span>{{$route.query.searchType === 'tag'?'标签搜索':'关键词搜索'}}</span>
                 <span>"{{$route.query.searchKey }}"</span>
-            </div>
+              </div>
               <div class="article-list">
                 <ArticleItem v-for="(val, index) in ArticlesList" :key="val.id" :ArticlesList="ArticlesList[index]" />
+                <div class="noData" v-show="ArticlesList.length == 0">
+                    暂无内容
+                </div>
               </div>
               <el-pagination background layout="prev, pager, next"  :page-count="total"
                 v-model:currentPage="nowPage" />
@@ -202,6 +205,18 @@ const searchByTag = async(key:string)=>{
     margin-bottom: 50px;
     border-radius: @border-ra ;
   }
+  .noData{
+    width: 100%;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: @background-color-op;
+    border-radius: @border-ra;
+    margin-bottom: 20px;
+    font-size: 30px;
+    color: @font-color;
+  }
 }
 
 .search-block {
@@ -216,9 +231,11 @@ const searchByTag = async(key:string)=>{
   span:first-child{
       margin-left: 20px;
       font-size: 25px;
+      color: @font-color;
   }
   span:last-child{
       font-size: 30px;
+      color: @font-color;
   }
 }
 
