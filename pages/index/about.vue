@@ -11,6 +11,10 @@
         <div class="txt">关于本站</div>
        </div>
        <div class="main">
+        2023-5-4<br>
+        使用了clever-cloud的免费mysql<br>
+        考虑重置nuxt,路由有很多问题,暂时没有时间修改<br>
+        <br>
         2023-1-19<br>
         前端:nuxt3，后端nestjs，数据库mysql，vercel部署。<br>
         之前用的免费mysql数据库访问不了，暂时借用了百度云的服务器数据库。<br>
@@ -18,6 +22,7 @@
         nuxt3在我手上问题很大，查不到资料好多问题没法解决。<br>
         ui什么的不想再搞了<br>
         seo貌似在vercel上没法生效?<br>
+
        </div>
     </div>
 </template>
