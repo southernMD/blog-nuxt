@@ -34,7 +34,8 @@ export const useApp = defineStore("app", {
 
   },
   persist: [{
-    paths: ['theme', 'optionDirectionFlag', 'hideFlag', 'orderChange', 'ArticlesList', 'ArticlesListYear'],
+    paths: ['theme', 'optionDirectionFlag', 'hideFlag', 'orderChange',
+     'ArticlesList', 'ArticlesListYear','imgObj','result','yiyan','navMessage'],
   }]
 });
 

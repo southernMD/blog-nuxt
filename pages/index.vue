@@ -68,6 +68,9 @@ const barScroll = (scrollObj: any) => {
     // console.log(scrollObj.scrollTop);
     scrollbarVal.value = scrollObj.scrollTop
 }
+const flag = useCookie('flag')
+flag.value = 'true'
+
 </script>
 
 <style lang="less">
