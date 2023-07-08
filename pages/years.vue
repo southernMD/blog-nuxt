@@ -36,7 +36,7 @@
               </div>
               <div class="article-list">
                 <ArticleItem v-for="(val, index) in ArticlesList" :key="val.id" :ArticlesList="ArticlesList[index]" />
-                <div class="noData" v-show="ArticlesList.length == 0">
+                <div class="noData" v-show="ArticlesList?.length == 0">
                     暂无内容
                 </div>
               </div>
@@ -56,7 +56,7 @@
       <div class="title">分类</div>
       <el-scrollbar>
         <ul class="list">
-          <li v-for="val in taglist">
+          <li v-for="val in taglist" @click="searchByTag(val)">
             <span>{{val}} </span>
           </li>
           <li v-show="taglist.length == 0" >

@@ -7,7 +7,7 @@
         <div class="article-list">
             <ArticleItem v-for="(val, index) in ArticlesList" :key="val.id"
                 :ArticlesList="ArticlesList[index]" />
-            <div class="noData" v-show="ArticlesList.length == 0">
+            <div class="noData" v-show="ArticlesList?.length == 0">
                 暂无内容
             </div>
         </div>

@@ -3,7 +3,8 @@
     <Title>南山有壶酒-文章-{{ss.msg?.title}}</Title>
     <!-- <Meta name="description" :content="ss.msg?.title+ss.msg?.title2"></Meta> -->
   </Head>
-  <div class="img" draggable="false">
+  <div class="contain" v-if="can">
+    <div class="img" draggable="false">
     <el-image :src="ss.msg?.imgUrl" fit="cover" draggable="false"></el-image>
     <div class="msg">
       <div class="title" @click.stop>
@@ -38,18 +39,22 @@
         {{ ss.msg?.title2 }}
       </div>
     </div>
+    </div>
+    <div class="md-editor-bk">
+      <md-editor v-model="ss.Text" preview-only :theme="theme" editorId="MD" />
+    </div>
+    <div class="cc">
+      <p class="p1">标题：{{ss.msg?.title}}</p>
+      <p class="p2">作者：southernMD</p>
+      <p class="p3">发布于：<a :href="href">{{href}}</a></p>
+    </div>
+    <MyForm :article_id="+ss.id"></MyForm>
+    <div class="comment-list">
+      <CommentList :list="ss.list"></CommentList>
+    </div>
   </div>
-  <div class="md-editor-bk">
-    <md-editor v-model="ss.Text" preview-only :theme="theme" editorId="MD" />
-  </div>
-  <div class="cc">
-    <p>标题：{{ss.msg?.title}}</p>
-    <p>作者：southernMD</p>
-    <p>发布于：<a :href="href">{{href}}</a></p>
-  </div>
-  <MyForm :article_id="+ss.id"></MyForm>
-  <div class="comment-list">
-    <CommentList :list="ss.list"></CommentList>
+  <div class="contain no" v-else>
+    对象不可访问
   </div>
 </template>
 
@@ -65,6 +70,7 @@ const $route = useRoute()
 const $router = useRouter()
 const AppPinia = useApp()
 const OneArticle = useOneArticle()
+const can = ref(true)
 // const id = ref(0) as Ref<number>;
 // const article:Ref<any> = ref()
 // const msg:Ref<any> = ref()
@@ -92,9 +98,7 @@ onMounted(async()=>{
   ss.article = await useGetArticle(ss.id,AppPinia)
   if(ss.article){
     if(ss.article.result.length == 0){
-      $router.push({
-        path:'404'
-      })
+      can.value = false
     }
     ss.msg = ss.article.result[0] as ArticleObj
     ss.Text = ss.msg.text
@@ -124,6 +128,19 @@ onMounted(() => {
 </script>
 
 <style scoped lang="less">
+.contain{
+  width: 100%;
+}
+.no{
+  height: 300px;
+  background-color: @background-color-op;
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: @border-ra;
+
+}
 .img {
   // background-color: @background-color-op;
   width: 100%;
@@ -192,6 +209,7 @@ onMounted(() => {
       letter-spacing: 5px;
       // margin-top: -60px;
       margin-bottom: 10px;
+      white-space: nowrap;
     }
 
     .title2 {
@@ -248,6 +266,11 @@ span::-moz-selection {
   }
   p{
     margin: 10px 10px;
+  }
+  .p1,.p2,.p3{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
 .comment-list {

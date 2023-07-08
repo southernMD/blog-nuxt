@@ -11,6 +11,16 @@
         <div class="txt">关于本站</div>
        </div>
        <div class="main">
+        2023-7-8<br>
+        经过一些操作，修复了一些bug，之前刷新页面没数据的情况是nuxt3.0的问题<br>
+        通过升级到nuxt3.6得到了解决<br>
+        对信息栏做了缓存，但是缓存有一点问题<br>
+        <br>
+        2023-6-29<br>
+        uni-app移植的安卓app端已经完成<br>
+        发邮件到bluenomarisa@qq.com可获取apk安装包<br>
+        移植版无切换主题，且实验室不可用(反正没东西)<br>
+        <br>
         2023-5-4<br>
         使用了clever-cloud的免费mysql<br>
         考虑重置nuxt,路由有很多问题,暂时没有时间修改<br>
@@ -22,7 +32,6 @@
         nuxt3在我手上问题很大，查不到资料好多问题没法解决。<br>
         ui什么的不想再搞了<br>
         seo貌似在vercel上没法生效?<br>
-
        </div>
     </div>
 </template>
@@ -56,6 +65,10 @@
         color: @font-color;
         line-height: 20px;
         font-size: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        
     }
 }
 </style>

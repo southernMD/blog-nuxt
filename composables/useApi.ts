@@ -34,7 +34,7 @@ export const useGetArticlesList = async(nowPage:number,pageSize:number,password:
     } catch (error:any) {
         // console.log(error);
         // console.log(error.status);
-        if(error.status === 401){
+        if(error.statusCode === 401){
             let result = (await useGetToken()).token
             localStorage.setItem('token',result)
             return useGetArticlesList(nowPage,pageSize,password,flag)
@@ -52,7 +52,7 @@ export const useGetArticle = async(id:number | string,AppPinia:any):Promise<ResO
             resolve(result)
         })
     } catch (error:any) {
-        if(error.status === 401){
+        if(error.statusCode === 401){
             let result = (await useGetToken()).token
             AppPinia.author = result
             return useGetArticle(id,AppPinia)

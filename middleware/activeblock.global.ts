@@ -20,9 +20,9 @@ export default defineNuxtRouteMiddleware((to, from) => {
         case '/board':
             AppPinia.activeBlock = '留言板'
             break;
-        case '/experiment':
-            AppPinia.activeBlock = '实验室'
-            break;
+        // case '/experiment':
+        //     AppPinia.activeBlock = '实验室'
+        //     break;
         case '/years':
             AppPinia.activeBlock = '十年'
             break;

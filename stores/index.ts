@@ -23,7 +23,11 @@ export const useApp = defineStore("app", {
         user: '',
         text: '',
         id: 0
-      }
+      },
+      imgObj:{},
+      result:{},
+      yiyan:{},
+      navMessage:[]
     };
   },
   actions: {

@@ -1,6 +1,6 @@
 <template>
     <div class="MyMessage">
-        <el-image :src="imgSrc" style="width:300px; height: 200px;" fit="cover">
+        <el-image :src="AppPinia?.imgObj?.result?.[0]" style="width:300px; height: 200px;" fit="cover">
             <template #placeholder>
                 <div></div>
             </template>
@@ -9,7 +9,7 @@
             src="https://gravatar.loli.net/avatar/e6b6cb8333565fd6cff15e3c8ba8ade1?s=80" alt="">
         <h1 class="name">南山有壶酒</h1>
         <div class="yiyan">
-            <span>{{ yiyan }}</span>
+            <span>{{ AppPinia.yiyan }}</span>
         </div>
         <div class="nav-list">
             <div class="nav" v-for="(val, index) in navMessage" :key="val">
@@ -38,24 +38,42 @@
 
 <script setup lang="ts">
 import { Ref } from 'vue'
-import { useOneArticle } from '~~/stores';
+import { useOneArticle,useApp } from '~~/stores';
 import { ElImage, ElAvatar, ElSkeleton } from 'element-plus';
-const imgObj = await useGetImage() as ResOptions<any>
-const result= (await useGetBaseMessage() as ResOptions<{base_message:{tags_number:number,gather_number:number,article_number:number},tags_list:string[],tags_list_years:string[]}>).result
-const {base_message,tags_list,tags_list_years} = result as {base_message:{tags_number:number,gather_number:number,article_number:number},tags_list:string[],tags_list_years:string[]}
-const { public: { VITE_PACK_ENV } } = useRuntimeConfig() // 3.0正式版环境变量要从useRuntimeConfig里的public拿
-const OneArticle = useOneArticle()
 let imgSrc = ref() as Ref<ResOptions<any>>
-if (VITE_PACK_ENV == 'build') {
-    imgSrc.value = imgObj.result[0]
-} else {
-    imgSrc.value = imgObj.result[0]
-}
-const navMessage = ref([base_message.article_number,base_message.gather_number,base_message.tags_number])
-OneArticle.tags_list = tags_list as any
-OneArticle.tags_list_years = tags_list_years as any
 const navTitle = ['文章', '分类', '标签']
-const yiyan = await useGetYiYan()
+const AppPinia = useApp()
+const flag = useCookie('flag')
+// flag.value = flag.value || 'true'
+console.log(flag.value,52)
+const navMessage:any = toRef(AppPinia,'navMessage')
+if(flag.value == true){
+    AppPinia.imgObj = await useGetImage()
+    AppPinia.result = (await useGetBaseMessage())!.result!
+    AppPinia.yiyan =  await useGetYiYan() as string
+    // AppPinia.MessageFlag = false
+    let {base_message,tags_list,tags_list_years} = AppPinia.result as {base_message:{tags_number:number,gather_number:number,article_number:number},tags_list:string[],tags_list_years:string[]}
+    const { public: { VITE_PACK_ENV } } = useRuntimeConfig() // 3.0正式版环境变量要从useRuntimeConfig里的public拿
+    const OneArticle = useOneArticle()
+    OneArticle.tags_list = tags_list as any
+    OneArticle.tags_list_years = tags_list_years as any
+    navMessage.value = [base_message.article_number,base_message.gather_number,base_message.tags_number]
+    flag.value = false
+}
+// onMounted(async()=>{
+//     let {base_message,tags_list,tags_list_years} = result as {base_message:{tags_number:number,gather_number:number,article_number:number},tags_list:string[],tags_list_years:string[]}
+//     const { public: { VITE_PACK_ENV } } = useRuntimeConfig() // 3.0正式版环境变量要从useRuntimeConfig里的public拿
+//     const OneArticle = useOneArticle()
+//     if (VITE_PACK_ENV == 'build') {
+//         imgSrc.value = imgObj.result[0]
+//     } else {
+//         imgSrc.value = imgObj.result[0]
+//     }
+//     OneArticle.tags_list = tags_list as any
+//     OneArticle.tags_list_years = tags_list_years as any
+//     navMessage.value = [base_message.article_number,base_message.gather_number,base_message.tags_number]
+// })
+
 </script>
 
 <style scoped lang="less">

@@ -42,8 +42,13 @@
                             <el-scrollbar>
                                 <div id="left-drawer">
                                     <my-search-input></my-search-input>
-                                    <Component :is="comps[flag]">
-                                    </Component>
+                                    <MyMessage v-show="flag==0"></MyMessage>
+                                    <TagList v-show="flag==1"></TagList>
+                                    <Directory v-show="flag==2"></Directory>
+                                    <!-- <keep-alive>
+                                        <Component :is="comps[flag]">
+                                        </Component>
+                                    </keep-alive> -->
                                     <div class="option">
                                         <div v-for="(val, index) in tagslen" @click="change(index)"
                                             :class="{ active: flag == index }" :key="val">{{ tags[index] }}</div>
@@ -130,11 +135,12 @@ import { useRouter, useRoute } from 'vue-router';
 import { ElDrawer, ElButton, ElIcon, ElInput, ElScrollbar, ElMessageBox, ElMessage } from 'element-plus'
 import { ArrowLeftBold, ArrowRightBold, Sunny, Moon, Hide, CaretLeft, CaretRight, Top } from '@element-plus/icons-vue'
 import { useApp } from '@/stores/index'
-import { f } from 'ohmyfetch/dist/error-65d5de49';
 const $router = useRouter()
 const $route = useRoute()
 const AppPinia = useApp()
-const navArr = ['首页', '文章', '留言板', '实验室', '十年', '关于'];
+// const navArr = ['首页', '文章', '留言板', '实验室', '十年', '关于'];
+const navArr = ['首页', '文章', '留言板', '十年', '关于'];
+
 const navicons = ['icon-shouye', 'icon-wenzhang', 'icon-liuyan', 'icon-flask', 'icon-zhiwu', 'icon-guanyu']
 let theme = toRef(AppPinia, 'theme')
 let drawerFlag = ref(false)
@@ -184,9 +190,9 @@ const go = async(path: string) => {
         case '留言板':
             p = '/board'
             break;
-        case '实验室':
-            p = '/experiment'
-            break;
+        // case '实验室':
+        //     p = '/experiment'
+        //     break;
         case '十年':
             p = '/years'
             break;
