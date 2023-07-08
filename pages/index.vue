@@ -69,8 +69,11 @@ const barScroll = (scrollObj: any) => {
     scrollbarVal.value = scrollObj.scrollTop
 }
 const flag = useCookie('flag')
-flag.value = 'true'
-
+onMounted(()=>{
+    window.addEventListener('beforeunload', function (event) {
+        flag.value = 'true'
+    });
+})
 </script>
 
 <style lang="less">

@@ -47,7 +47,8 @@ const flag = useCookie('flag')
 // flag.value = flag.value || 'true'
 console.log(flag.value,52)
 const navMessage:any = toRef(AppPinia,'navMessage')
-if(flag.value == true){
+console.log(AppPinia.yiyan)
+if(flag.value == true ){
     AppPinia.imgObj = await useGetImage()
     AppPinia.result = (await useGetBaseMessage())!.result!
     AppPinia.yiyan =  await useGetYiYan() as string

@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "@element-plus/nuxt": "^1.0.5",
+    "@pinia-plugin-persistedstate/nuxt": "^1.1.1",
     "@types/gravatar": "^1.8.3",
     "nuxt": "^3.6.2",
     "unplugin-element-plus": "^0.4.1"
