@@ -2,6 +2,8 @@
 <Head>
     <Title>南山有壶酒-留言板-世纪末的一方净土</Title>
     <Meta name="description" content="留言板"></Meta>
+    <Meta name="keywords" content="南山有壶酒-世纪末的一方净土">
+    </Meta>
   </Head>
   <div class="board">
     <div class="title">

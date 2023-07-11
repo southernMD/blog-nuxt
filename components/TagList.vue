@@ -22,6 +22,10 @@ const OneArticle = useOneArticle()
 const AppPinia = useApp()
 const tags = toRef(OneArticle,'tags_list')
 const tagsCopy = ref(tags.value) as Ref<any>
+watch(tags,()=>{
+    tagsCopy.value = tags
+},{deep:true})
+
 const tagsColor = ['success', 'warning', 'danger', '']
 const $router = useRouter()
 const $route = useRoute()

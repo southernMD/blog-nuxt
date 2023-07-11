@@ -67,6 +67,6 @@ export const useOneArticle = defineStore("oneArticle", {
     }
   },
   persist: [{
-    paths: ['ss'],
+    paths: ['ss','tags_list','tags_list_years'],
   }]
 })

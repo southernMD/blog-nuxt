@@ -71,7 +71,7 @@ const barScroll = (scrollObj: any) => {
 const flag = useCookie('flag')
 onMounted(()=>{
     window.addEventListener('beforeunload', function (event) {
-        flag.value = 'true'
+        flag.value = false
     });
 })
 </script>

@@ -48,7 +48,8 @@ const flag = useCookie('flag')
 console.log(flag.value,52)
 const navMessage:any = toRef(AppPinia,'navMessage')
 console.log(AppPinia.yiyan)
-if(flag.value == true ){
+console.log(AppPinia.result,'114514')
+if(flag.value == false ){
     AppPinia.imgObj = await useGetImage()
     AppPinia.result = (await useGetBaseMessage())!.result!
     AppPinia.yiyan =  await useGetYiYan() as string
@@ -59,7 +60,7 @@ if(flag.value == true ){
     OneArticle.tags_list = tags_list as any
     OneArticle.tags_list_years = tags_list_years as any
     navMessage.value = [base_message.article_number,base_message.gather_number,base_message.tags_number]
-    flag.value = false
+    flag.value = true
 }
 // onMounted(async()=>{
 //     let {base_message,tags_list,tags_list_years} = result as {base_message:{tags_number:number,gather_number:number,article_number:number},tags_list:string[],tags_list_years:string[]}

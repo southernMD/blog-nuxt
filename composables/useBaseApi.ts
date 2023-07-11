@@ -11,7 +11,7 @@ const fetch = (url: string, options?: any,lazy = false): Promise<any> => {
   // 如果需要统一加参数可以options.params.token = 'xxx'
   return new Promise((resolve, reject) => {
     useFetch(reqUrl, { ...options,key,lazy}).then(({ data, error }) => {
-      console.log(data,'dahsdaid8912u81u31294r-23uthwejdcasio0');
+      // console.log(data,'dahsdaid8912u81u31294r-23uthwejdcasio0');
       if (error.value) {
         reject(error.value)
         return
@@ -24,8 +24,8 @@ const fetch = (url: string, options?: any,lazy = false): Promise<any> => {
         reject(value)
       }
     }).catch((err: any) => {
-      console.log('err)(*YY(&^&',reqUrl);
-      console.log(err)
+      // console.log('err)(*YY(&^&',reqUrl);
+      // console.log(err)
       reject(err)
     })
   })
