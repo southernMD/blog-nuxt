@@ -49,7 +49,7 @@ console.log(flag.value,52)
 const navMessage:any = toRef(AppPinia,'navMessage')
 console.log(AppPinia.yiyan)
 console.log(AppPinia.result,'114514')
-if(flag.value == false ){
+if(!flag.value){
     AppPinia.imgObj = await useGetImage()
     AppPinia.result = (await useGetBaseMessage())!.result!
     AppPinia.yiyan =  await useGetYiYan() as string
