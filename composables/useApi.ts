@@ -104,3 +104,10 @@ export const useGetBaseMessage = async()=>{
         resolve(result)
     })
 }
+
+export const useAboutHtml = async()=>{
+    const result = await Http.get(`/show/about`)
+    return new Promise<ResOptions<any>>((resolve, reject) => {
+        resolve(result)
+    }) 
+}
