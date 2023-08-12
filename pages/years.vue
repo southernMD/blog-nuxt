@@ -73,7 +73,8 @@
 import { ElDrawer, ElScrollbar, ElPagination } from 'element-plus'
 import { Ref} from 'vue'
 import { useApp,useOneArticle } from '~~/stores';
-import {throttle} from 'lodash'
+import _ from 'lodash'
+const {throttle} = _
 
 const AppPinia = useApp()
 const OneArticle = useOneArticle()

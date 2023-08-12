@@ -27,7 +27,8 @@
 <script setup lang="ts">
 import { ElScrollbar } from 'element-plus';
 import { useApp } from '@/stores'
-import {throttle} from 'lodash'
+import _ from 'lodash'
+const {throttle} = _
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 const AppPinia = useApp()
 const $route = useRoute()
