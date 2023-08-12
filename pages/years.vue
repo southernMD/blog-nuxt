@@ -13,7 +13,7 @@
   </Head>
   <NuxtLayout name="maintemplate">
     <template #default>
-      <el-scrollbar ref="scrollbarRef" @scroll="barScroll">
+      <el-scrollbar ref="scrollbarRef" @scroll="barScrollthrottle">
         <div style="height:100vh;">
           <NuxtLayout name="container">
             <template #left>
@@ -73,6 +73,8 @@
 import { ElDrawer, ElScrollbar, ElPagination } from 'element-plus'
 import { Ref} from 'vue'
 import { useApp,useOneArticle } from '~~/stores';
+import {throttle} from 'lodash'
+
 const AppPinia = useApp()
 const OneArticle = useOneArticle()
 
@@ -111,7 +113,7 @@ const barScroll = (scrollObj: any) => {
   // console.log(scrollObj.scrollTop);
   scrollbarVal.value = scrollObj.scrollTop
 }
-
+const barScrollthrottle = throttle(barScroll,800)
 const path2 = toRef($route, 'path')
 watch(path2, () => {
   console.log(path2);

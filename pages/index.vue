@@ -13,7 +13,7 @@
     </Head>
     <NuxtLayout name="maintemplate">
         <template #default>
-            <el-scrollbar ref="scrollbarRef" @scroll="barScroll">
+            <el-scrollbar ref="scrollbarRef" @scroll="barScrollthrottle">
                 <BaseLook>
                     <template #right>
                         <LazyNuxtPage></LazyNuxtPage>
@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import { ElScrollbar } from 'element-plus';
 import { useApp } from '@/stores'
+import {throttle} from 'lodash'
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 const AppPinia = useApp()
 const $route = useRoute()
@@ -65,9 +66,11 @@ watch(path2,()=>{
 })
 
 const barScroll = (scrollObj: any) => {
-    // console.log(scrollObj.scrollTop);
+    console.log( scrollObj.scrollTop);
     scrollbarVal.value = scrollObj.scrollTop
 }
+const barScrollthrottle = throttle(barScroll,800)
+
 const flag = useCookie('flag')
 onMounted(()=>{
     window.addEventListener('beforeunload', function (event) {
