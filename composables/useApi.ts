@@ -61,12 +61,19 @@ export const useGetArticle = async(id:number | string,AppPinia:any):Promise<ResO
 }
 
 export const usePostComment = async(obj:any)=>{
-    const {country,province,area} = JSON.parse(await Http.get('https://ip.useragentinfo.com/json'))
-    const location = `${country} ${province} ${area}`
+    const {address} = JSON.parse(await Http.get('https://www.ip.cn/api/index?ip&type=0'))
+    const location = `${address}`
+    const locationArr = location.trim().split(' ')
     if(location.trim() == ''){
         obj['location'] = '未知'
     }else{
-        obj['location'] = location.trim()
+        if(location.trim().startsWith('中国')){
+            locationArr.shift()
+            const result = locationArr.slice(0, -1)
+            obj['location']  = result.join(' ')
+        }else{
+            obj['location'] = location.trim()
+        }
     }
     let result = await Http.post(`/show/comment`,obj)
     return new Promise<ResOptions<any>>((resolve, reject) => {
