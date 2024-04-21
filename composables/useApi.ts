@@ -60,25 +60,50 @@ export const useGetArticle = async(id:number | string,AppPinia:any):Promise<ResO
     }
 }
 
+// 声明一个处理响应的函数
+
 export const usePostComment = async(obj:any)=>{
-    const {address} = JSON.parse(await Http.get('https://www.ip.cn/api/index?ip&type=0'))
-    const location = `${address}`
-    const locationArr = location.trim().split(' ')
-    if(location.trim() == ''){
-        obj['location'] = '未知'
-    }else{
-        if(location.trim().startsWith('中国')){
-            locationArr.shift()
-            const result = locationArr.slice(0, -1)
-            obj['location']  = result.join(' ')
-        }else{
-            obj['location'] = location.trim()
-        }
-    }
-    let result = await Http.post(`/show/comment`,obj)
-    return new Promise<ResOptions<any>>((resolve, reject) => {
-        resolve(result)
+    return new Promise<void>((resolve, reject) => {
+        window.IPCallBack = async function(message) {
+            console.log(message);
+            let {proCode,addr,pro,city} = message
+            if(proCode == 999999){
+                if(addr.length == 0){
+                    obj['location'] = '未知'
+                }else{
+                    obj['location'] = addr
+                }
+            }else{
+                obj['location'] = `${pro} ${city}`
+            }
+            let result = await Http.post(`/show/comment`,obj)
+            resolve(result)
+            delete window['IPCallBack'];
+        };
+        const script = document.createElement('script');
+        script.src = 'https://whois.pconline.com.cn/ipJson.jsp?callback=IPCallBack';
+        document.body.appendChild(script);
     })
+
+
+    // const {address} = JSON.parse(await Http.get('https://www.ip.cn/api/index?ip&type=0'))
+    // const location = `${address}`
+    // const locationArr = location.trim().split(' ')
+    // if(location.trim() == ''){
+    //     obj['location'] = '未知'
+    // }else{
+    //     if(location.trim().startsWith('中国')){
+    //         locationArr.shift()
+    //         const result = locationArr.slice(0, -1)
+    //         obj['location']  = result.join(' ')
+    //     }else{
+    //         obj['location'] = location.trim()
+    //     }
+    // }
+    // let result = await Http.post(`/show/comment`,obj)
+    // return new Promise<ResOptions<any>>((resolve, reject) => {
+    //     resolve(result)
+    // })
 }
 
 export const useGetArticleComment = async(id:number | string)=>{

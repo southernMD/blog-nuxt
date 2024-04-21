@@ -9,9 +9,9 @@ const fetch = (url: string, options?: any,lazy = false): Promise<any> => {
   // 不设置key，始终拿到的都是第一个请求的值，参数一样则不会进行第二次请求
   const key = hash(JSON.stringify(options) + url)
   // 如果需要统一加参数可以options.params.token = 'xxx'
+  console.log(reqUrl);
   return new Promise((resolve, reject) => {
     useFetch(reqUrl, { ...options,key,lazy}).then(({ data, error }) => {
-      // console.log(data,'dahsdaid8912u81u31294r-23uthwejdcasio0');
       if (error.value) {
         reject(error.value)
         return
