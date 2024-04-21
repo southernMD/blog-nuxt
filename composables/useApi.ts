@@ -63,29 +63,39 @@ export const useGetArticle = async(id:number | string,AppPinia:any):Promise<ResO
 // 声明一个处理响应的函数
 
 export const usePostComment = async(obj:any)=>{
-    return new Promise<void>((resolve, reject) => {
-        window.IPCallBack = async function(message) {
-            console.log(message);
-            let {proCode,addr,pro,city} = message
-            if(proCode == 999999){
-                if(addr.length == 0){
-                    obj['location'] = '未知'
-                }else{
-                    obj['location'] = addr
-                }
-            }else{
-                obj['location'] = `${pro} ${city}`
-            }
-            let result = await Http.post(`/show/comment`,obj)
-            resolve(result)
-            delete window['IPCallBack'];
-        };
-        const script = document.createElement('script');
-        script.src = 'https://whois.pconline.com.cn/ipJson.jsp?callback=IPCallBack';
-        document.body.appendChild(script);
+    // return new Promise<void>((resolve, reject) => {
+    //     window.IPCallBack = async function(message) {
+    //         console.log(message);
+    //         let {proCode,addr,pro,city} = message
+    //         if(proCode == 999999){
+    //             if(addr.length == 0){
+    //                 obj['location'] = '未知'
+    //             }else{
+    //                 obj['location'] = addr
+    //             }
+    //         }else{
+    //             obj['location'] = `${pro} ${city}`
+    //         }
+    //         let result = await Http.post(`/show/comment`,obj)
+    //         resolve(result)
+    //         delete window['IPCallBack'];
+    //     };
+    //     const script = document.createElement('script');
+    //     script.src = 'https://whois.pconline com.cn/ipJson.jsp?callback=IPCallBack';
+    //     document.body.appendChild(script);
+    //     throw('err')
+    // })
+
+    const {ipdata} = await Http.get('https://api.vore.top/api/IPdata')
+    let locationStr = `${ipdata.info1} ${ipdata.info2} ${ipdata.info3}`.trim() 
+    if(locationStr.length >10){
+        locationStr = ipdata.info1
+    }
+    obj['location'] = locationStr
+    let result = await Http.post(`/show/comment`,obj)
+    return new Promise<ResOptions<any>>((resolve, reject) => {
+        resolve(result)
     })
-
-
     // const {address} = JSON.parse(await Http.get('https://www.ip.cn/api/index?ip&type=0'))
     // const location = `${address}`
     // const locationArr = location.trim().split(' ')
