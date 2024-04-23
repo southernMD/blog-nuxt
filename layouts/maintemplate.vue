@@ -1,8 +1,7 @@
 <template>
     <div class="maintemplate">
-
         <Head>
-            <Link rel="stylesheet" href="//at.alicdn.com/t/c/font_3736505_cc1y8em43d.css">
+            <Link rel="stylesheet" href="//at.alicdn.com/t/c/font_3736505_n3yanhkaegr.css">
             </Link>
             <Link rel="icon" href="/favicon.ico">
             </Link>
@@ -10,6 +9,7 @@
         <Transition name="title-way">
             <div class="title" v-show="scrollbarVal < 100">
                 <div class="title-main">
+                    <!-- <audio src="http://music.163.com/song/media/outer/url?id=29777226.mp3" controls></audio> -->
                     <div class="search" @click="showSearchDrawer">
                         <i class="iconfont icon-search"></i>
                     </div>
@@ -45,10 +45,6 @@
                                     <MyMessage v-show="flag==0"></MyMessage>
                                     <TagList v-show="flag==1"></TagList>
                                     <Directory v-show="flag==2"></Directory>
-                                    <!-- <keep-alive>
-                                        <Component :is="comps[flag]">
-                                        </Component>
-                                    </keep-alive> -->
                                     <div class="option">
                                         <div v-for="(val, index) in tagslen" @click="change(index)"
                                             :class="{ active: flag == index }" :key="val">{{ tags[index] }}</div>
@@ -101,6 +97,15 @@
                     <div class="message">{{ theme == 'dark' ? '夜间模式' : '日间模式' }}</div>
                 </template>
             </Block>
+            <Block class="skin" @block="handleChangeMusic">
+                <template #icon>
+                    <i v-show="music" class="iconfont icon-yinyue"></i>
+                    <i v-show="!music" class="iconfont icon-yinyueguan"></i>
+                </template>
+                <template #message>
+                    <div class="message">{{ music ? '关闭音乐' : '开启音乐' }}</div>
+                </template>
+            </Block>
             <Block class="hide-btn" @block="handleHideOption">
                 <template #icon>
                     <el-icon>
@@ -143,6 +148,7 @@ const navArr = ['首页', '文章', '留言板', '十年', '关于'];
 
 const navicons = ['icon-shouye', 'icon-wenzhang', 'icon-liuyan', 'icon-flask', 'icon-zhiwu', 'icon-guanyu']
 let theme = toRef(AppPinia, 'theme')
+let music = toRef(AppPinia, 'music')
 let drawerFlag = ref(false)
 let scrollbarVal = toRef(AppPinia, 'scrollbarVal')
 
@@ -325,6 +331,9 @@ const admit = () => {
     })
 }
 
+const handleChangeMusic = ()=>{
+    music.value = !music.value
+}
 </script>
 
 <style scoped lang="less">

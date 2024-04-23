@@ -11,64 +11,10 @@
     <Meta name="description" content="南山有壶酒-十年生死">
     </Meta>
   </Head>
-  <NuxtLayout name="maintemplate">
-    <template #default>
-      <el-scrollbar ref="scrollbarRef" @scroll="barScrollthrottle">
-        <div style="height:100vh;">
-          <NuxtLayout name="container">
-            <template #left>
-              <div class="title">分类</div>
-              <el-scrollbar>
-                <ul class="list">
-                  <li v-for="val in taglist" @click="searchByTag(val)">
-                    <span>{{val}} </span>
-                  </li>
-                  <li v-show="taglist.length == 0" >
-                    <span style="cursor: default; ">暂无内容</span>
-                  </li>
-                </ul>
-              </el-scrollbar>
-            </template>
-            <template #right>
-              <div class="search-block" v-show="$route.query.searchType">
-                <span>{{$route.query.searchType === 'tag'?'标签搜索':'关键词搜索'}}</span>
-                <span>"{{$route.query.searchKey }}"</span>
-              </div>
-              <div class="article-list">
-                <ArticleItem v-for="(val, index) in ArticlesList" :key="val.id" :ArticlesList="ArticlesList[index]" />
-                <div class="noData" v-show="ArticlesList?.length == 0">
-                    暂无内容
-                </div>
-              </div>
-              <el-pagination background layout="prev, pager, next"  :page-count="total"
-                v-model:currentPage="nowPage" />
-            </template>
-          </NuxtLayout>
-        </div>
+  <LazyNuxtPage></LazyNuxtPage>
 
-      </el-scrollbar>
-    </template>
-  </NuxtLayout>
-  <el-drawer v-if="$route.path.includes('years')" direction="ltr" v-model="SearchDrawerFlag" :append-to-body="true"
-    :show-close="false" :with-header="false" size="70%">
-    <my-search-input></my-search-input>
-    <div class="drawer-ltr-bk">
-      <div class="title">分类</div>
-      <el-scrollbar>
-        <ul class="list">
-          <li v-for="val in taglist" @click="searchByTag(val)">
-            <span>{{val}} </span>
-          </li>
-          <li v-show="taglist.length == 0" >
-            <span style="cursor: default;">暂无内容</span>
-          </li>
-        </ul>
-      </el-scrollbar>
-    </div>
-
-  </el-drawer>
 </template>
-
+<!-- 
 <script setup lang="ts">
 import { ElDrawer, ElScrollbar, ElPagination } from 'element-plus'
 import { Ref} from 'vue'
@@ -256,4 +202,4 @@ const searchByTag = async(key:string)=>{
     background: @background-color-op !important;
   }
 }
-</style>
+</style> -->

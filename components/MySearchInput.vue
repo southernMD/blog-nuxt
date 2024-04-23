@@ -46,7 +46,7 @@ const goSearch = async() => {
         ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
         totalPages.value = +HttpRequestArticlesList.totalPages
         $router.push({
-            path:'articles',
+            path:'/articles',
             query:{
                 searchType:'key',
                 searchKey:searchVal.value

@@ -7,6 +7,23 @@
                 <slot name="option"></slot>
             </div>
         </div>
+        <el-drawer v-if="$route.path.includes('years')" direction="ltr" v-model="SearchDrawerFlag" :append-to-body="true"
+            :show-close="false" :with-header="false" size="70%">
+            <my-search-input></my-search-input>
+            <div class="drawer-ltr-bk">
+            <div class="title">分类</div>
+            <el-scrollbar>
+                <ul class="list">
+                <li v-for="val in taglist" @click="searchByTag(val)">
+                    <span>{{val}} </span>
+                </li>
+                <li v-show="taglist.length == 0" >
+                    <span style="cursor: default;">暂无内容</span>
+                </li>
+                </ul>
+            </el-scrollbar>
+            </div>
+        </el-drawer>
         <div class="left left-none" :class="{ 'placeholder': scrollbarVal <= 100 }"></div>
         <div class="right">
             <slot name="right"></slot>
@@ -16,15 +33,43 @@
 </template>
 
 <script setup lang="ts">
-import { useApp } from '@/stores'
+import { useApp,useOneArticle } from '@/stores'
 import { ElInput } from 'element-plus';
 const AppPinia = useApp()
+const SearchDrawerFlag = toRef(AppPinia, 'SearchDrawerFlag')
 let scrollbarVal = toRef(AppPinia, 'scrollbarVal')
 let searchVal = ref('')
 
 const goSearch = ()=>{
     console.log(searchVal.value);
     searchVal.value = ''
+}
+const nowPage = toRef(AppPinia,'nowPage')
+const ArticlesList  = toRef(AppPinia,'ArticlesListYear') as unknown as Ref<ArticleObj[]>
+const $route = useRoute()
+const OneArticle = useOneArticle()
+const $router = useRouter()
+const total = toRef(AppPinia,'totalPages')
+const taglist = toRef(OneArticle,'tags_list_years')
+
+watch(nowPage, async () => {
+  if(!$route.query.searchType){
+    const HttpRequestArticlesList = await useGetArticlesList(nowPage.value, 5, '', 1) as ArticleListHttp<ArticleObj[]>
+    ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
+  }
+})
+const searchByTag = async(key:string)=>{
+    nowPage.value = 1
+    const HttpRequestArticlesList = await useGetArticlesList(1,5,key,2) as ArticleListHttp<ArticleObj[]>
+    ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
+    total.value = HttpRequestArticlesList.totalPages
+    $router.push({
+        path:'/years',
+        query:{
+            searchType:'tag',
+            searchKey:key
+        }
+    })
 }
 </script>
 
@@ -101,6 +146,45 @@ const goSearch = ()=>{
     }
 }
 
+.title {
+  font-size: 20px;
+  color: @font-color;
+  margin-top: 10px;
+  margin-left: 10px;
+  user-select: none;
+}
+
+.drawer-ltr-bk {
+  height: 500px;
+  position: relative;
+  z-index: 3;
+}
+
+.list {
+  width: 100%;
+  min-height: 300px;
+  height: auto;
+  margin-top: 10px;
+
+  li {
+    width: 100%;
+    user-select: none;
+    // background-color: red;
+    height: 40px;
+    line-height: 40px;
+
+    >span {
+      cursor: pointer;
+      color: @font-color;
+      padding-left: 20px;
+
+      &:hover {
+        color: @font-color-hover;
+      }
+    }
+
+  }
+}
 @media (min-width: 915px) {
     .main {
         width: 90vw;
