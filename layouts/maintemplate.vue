@@ -9,7 +9,7 @@
         <Transition name="title-way">
             <div class="title" v-show="scrollbarVal < 100">
                 <div class="title-main">
-                    <!-- <audio src="http://music.163.com/song/media/outer/url?id=29777226.mp3" controls></audio> -->
+                    <audio  :src="url" controls autoplay ref="audioRef" style="position: absolute; opacity: 0;"></audio>
                     <div class="search" @click="showSearchDrawer">
                         <i class="iconfont icon-search"></i>
                     </div>
@@ -25,6 +25,15 @@
                     </div>
                     <div class="menu" @click="showDrawer">
                         <i class="iconfont icon-caidan"></i>
+                    </div>
+                    <div class="songlrc">
+                        <div class="two-line" v-show="!ifOneLine">
+                            <div class="lrc-one">{{ twoLineSongLrc }}</div>
+                            <div class="lrc-translate">{{ twoLineSongLrcTra }}</div>
+                        </div>
+                        <div class="one-line" v-show="ifOneLine">
+                            <div class="lrc-two">{{oneLineSongLrc}}</div>
+                        </div>
                     </div>
                     <Teleport to="body">
                         <el-drawer v-model="drawerFlag" :append-to-body="true" :show-close="false" :with-header="false"
@@ -144,9 +153,9 @@ const $router = useRouter()
 const $route = useRoute()
 const AppPinia = useApp()
 // const navArr = ['首页', '文章', '留言板', '实验室', '十年', '关于'];
-const navArr = ['首页', '文章', '留言板', '十年', '关于'];
+const navArr = ['首页', '文章', '留言板', '十年', '关于','音乐'];
 
-const navicons = ['icon-shouye', 'icon-wenzhang', 'icon-liuyan', 'icon-flask', 'icon-zhiwu', 'icon-guanyu']
+const navicons = ['icon-shouye', 'icon-wenzhang', 'icon-liuyan', 'icon-zhiwu', 'icon-guanyu','icon-yinyue']
 let theme = toRef(AppPinia, 'theme')
 let music = toRef(AppPinia, 'music')
 let drawerFlag = ref(false)
@@ -332,8 +341,119 @@ const admit = () => {
 }
 
 const handleChangeMusic = ()=>{
+    if(music.value)audioRef.value?.pause()
+    else audioRef.value?.play()
     music.value = !music.value
 }
+const musicList = toRef(AppPinia,'musicList')
+const url = ref('')
+const audioRef = ref<HTMLAudioElement>()
+const playIndex = ref(0)
+const oneLineSongLrc = toRef(AppPinia,'oneLineSongLrc')
+const twoLineSongLrc = toRef(AppPinia,'twoLineSongLrc')
+const twoLineSongLrcTra = toRef(AppPinia,'twoLineSongLrcTra')
+const ifOneLine = toRef(AppPinia,'ifOneLine') //ref(true)
+const playingTime = ref(0)
+let lrcArray:{time: number;lyric: any}[] = []
+let traArray:{time: number;lyric: any}[] = []
+let lrcArrayIndex = 0;
+let traArrayIndex = 0;
+const 播放 = ()=>{
+    audioRef.value?.play()
+    window.removeEventListener('click',播放)
+}
+onMounted(()=>{
+    if(music.value)window.addEventListener('click',播放)
+    //无歌词
+    if(musicList.value[playIndex.value].lrc.length <= 20 || Boolean(musicList.value[playIndex.value].ifScroll) == false){
+        ifOneLine.value = true
+        oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+    }else{
+        //无歌词或无滚动
+        lrcArray = parseLyricLine(musicList.value[playIndex.value].lrc)
+        //有翻译
+        if(Boolean(musicList.value[playIndex.value].ifTranslate)){
+            traArray = parseLyricLine(musicList.value[playIndex.value].translate)
+            ifOneLine.value = false
+        }else{
+            ifOneLine.value = true
+        }
+    }
+    audioRef.value!.addEventListener('ended',  () => {
+        playIndex.value++
+        if(playIndex.value >= musicList.value.length)playIndex.value = 0
+        url.value = musicList.value[playIndex.value].songUrl
+           //无歌词或无滚动
+        if(musicList.value[playIndex.value].lrc.length <= 20 || Boolean(musicList.value[playIndex.value].ifScroll) == false){
+            ifOneLine.value = true
+            oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+        }else{
+            //有歌词
+            lrcArray = parseLyricLine(musicList.value[playIndex.value].lrc)
+            //有翻译
+            if(Boolean(musicList.value[playIndex.value].ifTranslate)){
+                traArray = parseLyricLine(musicList.value[playIndex.value].translate)
+                ifOneLine.value = false
+            }else{
+                ifOneLine.value = true
+            }
+        }
+        lrcArrayIndex = 0;
+        traArrayIndex = 0;
+    })
+    audioRef.value!.addEventListener('timeupdate',()=>{
+        //单位是s
+        let t = audioRef.value!.currentTime * 1000
+        if(!(musicList.value[playIndex.value].lrc.length <= 20 || Boolean(musicList.value[playIndex.value].ifScroll) == false)){
+            //如果没有翻译
+            if(Boolean(musicList.value[playIndex.value].ifTranslate) == false){
+                for(let i = lrcArrayIndex;i<lrcArray.length;i++){
+                    if(t >= lrcArray[i].time && t <= (lrcArray[i+1]?.time ?? Number.MAX_VALUE)){
+                        if(lrcArray[i].lyric.length == 0 
+                        && (lrcArray[i+1]?.time ?? Number.MAX_VALUE - lrcArray[i].time > 1000 * 10)){
+                            ifOneLine.value = true
+                            oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+                        }else{
+                            oneLineSongLrc.value =lrcArray[i].lyric
+                        }
+                        lrcArrayIndex = i
+                        break
+                    }
+                }
+            }else{
+                ifOneLine.value = false
+                for(let i = lrcArrayIndex;i<lrcArray.length;i++){
+                    if(t >= lrcArray[i].time && t <= (lrcArray[i+1]?.time ?? Number.MAX_VALUE)){
+                        lrcArrayIndex = i
+                        break
+                    }
+                }
+                for(let i = traArrayIndex;i<traArray.length;i++){
+                    if(t >= traArray[i].time && t <= (traArray[i+1]?.time ?? Number.MAX_VALUE)){
+                        traArrayIndex = i
+                        break
+                    }
+                }
+                if((lrcArray[lrcArrayIndex].lyric.length == 0 
+                && (lrcArray[lrcArrayIndex+1]?.time ?? Number.MAX_VALUE - lrcArray[lrcArrayIndex].time > 1000 * 10))
+                || (traArray[traArrayIndex].lyric.length == 0 
+                && (traArray[traArrayIndex+1]?.time ?? Number.MAX_VALUE - traArray[traArrayIndex].time > 1000 * 10))
+                ){
+                    ifOneLine.value = true
+                    oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+                }else{
+                    twoLineSongLrc.value = lrcArray[lrcArrayIndex].lyric
+                    twoLineSongLrcTra.value = traArray[traArrayIndex].lyric
+                }
+            }
+        }
+    })
+})
+watch(musicList,()=>{
+    url.value = musicList.value[playIndex.value].songUrl
+
+},{immediate:true})
+
 </script>
 
 <style scoped lang="less">
@@ -360,6 +480,8 @@ const handleChangeMusic = ()=>{
         .title-main {
             width: 80%;
             height: 100%;
+            padding-left: 10%;
+            padding-right: 10%;
             display: flex;
             position: relative;
 
@@ -402,7 +524,6 @@ const handleChangeMusic = ()=>{
             .nav-list {
                 display: flex;
                 align-items: center;
-
                 .nav {
                     width: 80px;
                     height: 30px;
@@ -484,6 +605,55 @@ const handleChangeMusic = ()=>{
             @media (max-width:915px) {
                 .search {
                     display: block;
+                }
+            }
+            .songlrc{
+                position: absolute;
+                right: 0px;
+                // background-color: yellow;
+                width: 30%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                color: white;
+                .two-line{
+                    height: 100%;
+                    width: 100%;
+                    .lrc-one{
+                        height: 50%;
+                        line-height: 100%;
+                        align-items: center;
+                        justify-content: right;
+                        overflow: hidden;
+                        text-wrap: nowrap;
+                        display: flex;
+                        align-items: center;
+                        text-overflow: ellipsis;
+                    }
+                    .lrc-translate{
+                        height: 50%;
+                        line-height: 100%;
+                        overflow:hidden;
+                        text-overflow: ellipsis;
+                        justify-content: right;
+                        text-wrap: nowrap;
+                        display: flex;
+                        align-items: center;
+                    }
+                }
+                .one-line{
+                    font-size: 20px;
+                    text-wrap: nowrap;
+                    overflow: hidden;
+                    color: white;
+                    width: 100%;
+                    display: flex;
+                    justify-content: right;
+                }
+            }
+            @media (max-width:1265px) {
+                .songlrc {
+                    display: none;
                 }
             }
         }

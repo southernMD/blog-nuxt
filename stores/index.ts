@@ -28,11 +28,31 @@ export const useApp = defineStore("app", {
       result:{},
       yiyan:{},
       navMessage:[],
-      music:true
+      music:true,
+      musicList:<{
+        id: number
+        name: string
+        ar:string
+        al:string
+        songUrl:string
+        coverUrl:string
+        ifScroll:boolean
+        lrc:string
+        ifTranslate:boolean
+        translate:string
+        order:number
+      }[]>[],
+      oneLineSongLrc:'',
+      twoLineSongLrc:'',
+      twoLineSongLrcTra:'',
+      ifOneLine:true,
     };
   },
   actions: {
-
+    async reqMusic():Promise<any>{
+      let result = await useSongList() 
+      this.musicList = result
+  },
   },
   persist: [{
     paths: ['theme', 'optionDirectionFlag', 'hideFlag', 'orderChange',

@@ -6,6 +6,15 @@
                 <slot name="left"></slot>
                 <slot name="option"></slot>
             </div>
+            <div :class="{'lrc-none':true,'lrc':scrollbarVal > 100}" >
+                <div class="two-line" v-show="!ifOneLine">
+                    <div class="lrc-one">{{ twoLineSongLrc }}</div>
+                    <div class="lrc-translate">{{ twoLineSongLrcTra }}</div>
+                </div>
+                <div class="one-line" v-show="ifOneLine">
+                    <div class="lrc-two">{{oneLineSongLrc}}</div>
+                </div>
+            </div>
         </div>
         <el-drawer v-if="$route.path.includes('years')" direction="ltr" v-model="SearchDrawerFlag" :append-to-body="true"
             :show-close="false" :with-header="false" size="70%">
@@ -39,7 +48,10 @@ const AppPinia = useApp()
 const SearchDrawerFlag = toRef(AppPinia, 'SearchDrawerFlag')
 let scrollbarVal = toRef(AppPinia, 'scrollbarVal')
 let searchVal = ref('')
-
+const oneLineSongLrc = toRef(AppPinia,'oneLineSongLrc')
+const twoLineSongLrc = toRef(AppPinia,'twoLineSongLrc')
+const twoLineSongLrcTra = toRef(AppPinia,'twoLineSongLrcTra')
+const ifOneLine = toRef(AppPinia,'ifOneLine') //ref(true)
 const goSearch = ()=>{
     console.log(searchVal.value);
     searchVal.value = ''
@@ -144,6 +156,33 @@ const searchByTag = async(key:string)=>{
             display: none !important;
         }
     }
+    @media (max-width:915px) {
+        .lrc {
+            display: none !important;
+        }
+    }
+    .lrc-none{
+        display: none;
+    }
+    .lrc{
+        display: block;
+        width: 300px;
+        margin-top: 20px;
+        background: @background-color-op;
+        border-radius: @border-ra;
+        height: 100px;
+        color: @font-color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .two-line{
+            >div{
+                margin: 5px;
+            }
+        }
+
+    }
+
 }
 
 .title {

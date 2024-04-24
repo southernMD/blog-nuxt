@@ -153,3 +153,23 @@ export const useAboutHtml = async()=>{
         resolve(result)
     }) 
 }
+
+export const useSongList = async()=>{
+    try {
+        const result = await Http.get(`/show/music`)
+        if(result.status == 200){
+            return new Promise<any>((resolve, reject) => {
+                resolve(result.result)
+            }) 
+        }else{
+            return new Promise<any>((resolve, reject) => {
+                resolve([])
+            }) 
+        }
+
+    } catch (error) {
+        return new Promise<any>((resolve, reject) => {
+            resolve([])
+        }) 
+    }
+}

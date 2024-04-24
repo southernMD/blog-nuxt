@@ -78,6 +78,8 @@ onMounted(()=>{
         flag.value = false
     });
 })
+
+await AppPinia.reqMusic()
 </script>
 
 <style lang="less">
