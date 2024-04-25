@@ -1,7 +1,7 @@
 <template>
     <div class="maintemplate">
         <Head>
-            <Link rel="stylesheet" href="//at.alicdn.com/t/c/font_3736505_n3yanhkaegr.css">
+            <Link rel="stylesheet" href="//at.alicdn.com/t/c/font_3736505_7sbg3pyap88.css">
             </Link>
             <Link rel="icon" href="/favicon.ico">
             </Link>
@@ -9,7 +9,7 @@
         <Transition name="title-way">
             <div class="title" v-show="scrollbarVal < 100">
                 <div class="title-main">
-                    <audio  :src="url" controls autoplay ref="audioRef" style="position: absolute; opacity: 0;"></audio>
+                    <audio  :src="url"  autoplay ref="audioRef" style="position: absolute;"></audio>
                     <div class="search" @click="showSearchDrawer">
                         <i class="iconfont icon-search"></i>
                     </div>
@@ -214,6 +214,9 @@ const go = async(path: string) => {
         case '关于':
             p = '/about'
             break;
+        case '音乐':
+        p = '/music'
+            break;
     }
     if($route.path.includes(p) && (p == '/years' || p == '/articles')){
         const flag = p == '/years'?1:0
@@ -348,18 +351,19 @@ const handleChangeMusic = ()=>{
 const musicList = toRef(AppPinia,'musicList')
 const url = ref('')
 const audioRef = ref<HTMLAudioElement>()
-const playIndex = ref(0)
+const playIndex = toRef(AppPinia,'playIndex')
 const oneLineSongLrc = toRef(AppPinia,'oneLineSongLrc')
 const twoLineSongLrc = toRef(AppPinia,'twoLineSongLrc')
 const twoLineSongLrcTra = toRef(AppPinia,'twoLineSongLrcTra')
 const ifOneLine = toRef(AppPinia,'ifOneLine') //ref(true)
 const playingTime = ref(0)
-let lrcArray:{time: number;lyric: any}[] = []
-let traArray:{time: number;lyric: any}[] = []
+let lrcArray:Ref<{time: number;lyric: any}[]> = toRef(AppPinia,'lrcArray')
+let traArray:Ref<{time: number;lyric: any}[]> = toRef(AppPinia,'traArray')
 let lrcArrayIndex = 0;
 let traArrayIndex = 0;
 const 播放 = ()=>{
     audioRef.value?.play()
+    audioRef.value!.volume = 0.5
     window.removeEventListener('click',播放)
 }
 onMounted(()=>{
@@ -370,10 +374,12 @@ onMounted(()=>{
         oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
     }else{
         //无歌词或无滚动
-        lrcArray = parseLyricLine(musicList.value[playIndex.value].lrc)
+        lrcArray.value = parseLyricLine(musicList.value[playIndex.value].lrc)
+        console.log(lrcArray.value);
+        
         //有翻译
         if(Boolean(musicList.value[playIndex.value].ifTranslate)){
-            traArray = parseLyricLine(musicList.value[playIndex.value].translate)
+            traArray.value = parseLyricLine(musicList.value[playIndex.value].translate)
             ifOneLine.value = false
         }else{
             ifOneLine.value = true
@@ -389,10 +395,10 @@ onMounted(()=>{
             oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
         }else{
             //有歌词
-            lrcArray = parseLyricLine(musicList.value[playIndex.value].lrc)
+            lrcArray.value = parseLyricLine(musicList.value[playIndex.value].lrc)
             //有翻译
             if(Boolean(musicList.value[playIndex.value].ifTranslate)){
-                traArray = parseLyricLine(musicList.value[playIndex.value].translate)
+                traArray.value = parseLyricLine(musicList.value[playIndex.value].translate)
                 ifOneLine.value = false
             }else{
                 ifOneLine.value = true
@@ -403,18 +409,20 @@ onMounted(()=>{
     })
     audioRef.value!.addEventListener('timeupdate',()=>{
         //单位是s
+        AppPinia.songDuration = audioRef.value!.duration * 1000;
         let t = audioRef.value!.currentTime * 1000
+        AppPinia.songTime = t
         if(!(musicList.value[playIndex.value].lrc.length <= 20 || Boolean(musicList.value[playIndex.value].ifScroll) == false)){
             //如果没有翻译
             if(Boolean(musicList.value[playIndex.value].ifTranslate) == false){
-                for(let i = lrcArrayIndex;i<lrcArray.length;i++){
-                    if(t >= lrcArray[i].time && t <= (lrcArray[i+1]?.time ?? Number.MAX_VALUE)){
-                        if(lrcArray[i].lyric.length == 0 
-                        && (lrcArray[i+1]?.time ?? Number.MAX_VALUE - lrcArray[i].time > 1000 * 10)){
+                for(let i = lrcArrayIndex;i<lrcArray.value.length;i++){
+                    if(t >= lrcArray.value[i].time && t <= (lrcArray.value[i+1]?.time ?? Number.MAX_VALUE)){
+                        if(lrcArray.value[i].lyric.length == 0 
+                        && (lrcArray.value[i+1]?.time ?? Number.MAX_VALUE - lrcArray.value[i].time > 1000 * 10)){
                             ifOneLine.value = true
                             oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
                         }else{
-                            oneLineSongLrc.value =lrcArray[i].lyric
+                            oneLineSongLrc.value =lrcArray.value[i].lyric
                         }
                         lrcArrayIndex = i
                         break
@@ -422,38 +430,69 @@ onMounted(()=>{
                 }
             }else{
                 ifOneLine.value = false
-                for(let i = lrcArrayIndex;i<lrcArray.length;i++){
-                    if(t >= lrcArray[i].time && t <= (lrcArray[i+1]?.time ?? Number.MAX_VALUE)){
+                for(let i = lrcArrayIndex;i<lrcArray.value.length;i++){
+                    if(t >= lrcArray.value[i].time && t <= (lrcArray.value[i+1]?.time ?? Number.MAX_VALUE)){
                         lrcArrayIndex = i
                         break
                     }
                 }
-                for(let i = traArrayIndex;i<traArray.length;i++){
-                    if(t >= traArray[i].time && t <= (traArray[i+1]?.time ?? Number.MAX_VALUE)){
+                for(let i = traArrayIndex;i<traArray.value.length;i++){
+                    if(t >= traArray.value[i].time && t <= (traArray.value[i+1]?.time ?? Number.MAX_VALUE)){
                         traArrayIndex = i
                         break
                     }
                 }
-                if((lrcArray[lrcArrayIndex].lyric.length == 0 
-                && (lrcArray[lrcArrayIndex+1]?.time ?? Number.MAX_VALUE - lrcArray[lrcArrayIndex].time > 1000 * 10))
-                || (traArray[traArrayIndex].lyric.length == 0 
-                && (traArray[traArrayIndex+1]?.time ?? Number.MAX_VALUE - traArray[traArrayIndex].time > 1000 * 10))
+                if((lrcArray.value[lrcArrayIndex].lyric.length == 0 
+                && (lrcArray.value[lrcArrayIndex+1]?.time ?? Number.MAX_VALUE - lrcArray.value[lrcArrayIndex].time > 1000 * 10))
+                || (traArray.value[traArrayIndex].lyric.length == 0 
+                && (traArray.value[traArrayIndex+1]?.time ?? Number.MAX_VALUE - traArray.value[traArrayIndex].time > 1000 * 10))
                 ){
                     ifOneLine.value = true
                     oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
                 }else{
-                    twoLineSongLrc.value = lrcArray[lrcArrayIndex].lyric
-                    twoLineSongLrcTra.value = traArray[traArrayIndex].lyric
+                    twoLineSongLrc.value = lrcArray.value[lrcArrayIndex].lyric
+                    twoLineSongLrcTra.value = traArray.value[traArrayIndex].lyric
                 }
             }
         }
+    })
+    audioRef.value!.addEventListener('play',()=>{
+        console.log('play');
+        music.value = true
     })
 })
 watch(musicList,()=>{
     url.value = musicList.value[playIndex.value].songUrl
 
 },{immediate:true})
-
+const next = toRef(AppPinia,'twoLineSongLrcTra')
+const chagnePlay = toRef(AppPinia,'chagnePlay')
+watch(chagnePlay,()=>{
+    handleChangeMusic()
+})
+// watch(next,()=>{
+//     console.log('wokandaole ');
+//     playIndex.value++
+//     if(playIndex.value >= musicList.value.length)playIndex.value = 0
+//     url.value = musicList.value[playIndex.value].songUrl
+//         //无歌词或无滚动
+//     if(musicList.value[playIndex.value].lrc.length <= 20 || Boolean(musicList.value[playIndex.value].ifScroll) == false){
+//         ifOneLine.value = true
+//         oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+//     }else{
+//         //有歌词
+//         lrcArray.value = parseLyricLine(musicList.value[playIndex.value].lrc)
+//         //有翻译
+//         if(Boolean(musicList.value[playIndex.value].ifTranslate)){
+//             traArray.value = parseLyricLine(musicList.value[playIndex.value].translate)
+//             ifOneLine.value = false
+//         }else{
+//             ifOneLine.value = true
+//         }
+//     }
+//     lrcArrayIndex = 0;
+//     traArrayIndex = 0;
+// })
 </script>
 
 <style scoped lang="less">

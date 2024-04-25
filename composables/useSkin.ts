@@ -12,6 +12,7 @@ export const useSkin = (op:string)=>{
         document.getElementsByTagName('body')[0].style.setProperty('--boxShString', `0 0 25px #333`);
         document.getElementsByTagName('body')[0].style.setProperty('--md-color', `#666`);
         document.getElementsByTagName('body')[0].style.setProperty('--titleFontColor', `#333333`);
+        document.getElementsByTagName('body')[0].style.setProperty('--fontActiveColor', `#000`);
     }else if(op == 'dark'){
         document.getElementsByTagName('body')[0].style.setProperty('--backgroundBtn', `rgba(0, 0, 0, .6)`);
         document.getElementsByTagName('body')[0].style.setProperty('--backgroundModle', `rgba(0, 0, 0, .3)`);
@@ -25,5 +26,6 @@ export const useSkin = (op:string)=>{
         document.getElementsByTagName('body')[0].style.setProperty('--boxShString', `0 0 25px #f4f5f5`);
         document.getElementsByTagName('body')[0].style.setProperty('--md-color', `#bebebe`);
         document.getElementsByTagName('body')[0].style.setProperty('--titleFontColor', `#fff`);
+        document.getElementsByTagName('body')[0].style.setProperty('--fontActiveColor', `#fff`);
     }
 }

@@ -46,6 +46,13 @@ export const useApp = defineStore("app", {
       twoLineSongLrc:'',
       twoLineSongLrcTra:'',
       ifOneLine:true,
+      playIndex:0,
+      lrcArray:<{time: number;lyric: any}[]>[],
+      traArray:<{time: number;lyric: any}[]>[],
+      songTime:0,
+      songDuration:0,
+      next:0,
+      chagnePlay:true
     };
   },
   actions: {
@@ -56,7 +63,7 @@ export const useApp = defineStore("app", {
   },
   persist: [{
     paths: ['theme', 'optionDirectionFlag', 'hideFlag', 'orderChange',
-     'ArticlesList', 'ArticlesListYear','imgObj','result','yiyan','navMessage','music'],
+     'ArticlesList', 'ArticlesListYear','imgObj','result','yiyan','navMessage','music','playIndex'],
   }]
 });
 

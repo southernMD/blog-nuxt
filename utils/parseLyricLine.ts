@@ -12,7 +12,6 @@ export const parseLyricLine = (str: string = ''): Array<T> => {
             .filter((value) => {
                 return value.trim() !== "";
             }).map((value) => {
-                console.log(value);
                 let t = value.trim().match(timeExp) as RegExpMatchArray
                 if (t) {
                     t.forEach((element) => {
