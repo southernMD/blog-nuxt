@@ -39,6 +39,7 @@ watch(nowPage, async () => {
     if(!$route.query.searchType){
         const HttpRequestArticlesList = await useGetArticlesList(nowPage.value, 5,'',0) as ArticleListHttp<ArticleObj[]>
         ArticlesList.value = HttpRequestArticlesList.result as ArticleObj[]
+        AppPinia.toTopFlag = true
     }
 })
 </script>

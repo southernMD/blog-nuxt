@@ -173,3 +173,24 @@ export const useSongList = async()=>{
         }) 
     }
 }
+
+
+export const useTopArticle = async()=>{
+    try {
+        const result = await Http.get(`/show/top_article`)
+        if(result.status == 200){
+            return new Promise<any>((resolve, reject) => {
+                resolve(result.result)
+            }) 
+        }else{
+            return new Promise<any>((resolve, reject) => {
+                resolve([])
+            }) 
+        }
+
+    } catch (error) {
+        return new Promise<any>((resolve, reject) => {
+            resolve([])
+        }) 
+    }
+}

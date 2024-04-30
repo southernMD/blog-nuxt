@@ -31,8 +31,8 @@
                             <div class="lrc-one">{{ twoLineSongLrc }}</div>
                             <div class="lrc-translate">{{ twoLineSongLrcTra }}</div>
                         </div>
-                        <div class="one-line" v-show="ifOneLine">
-                            <div class="lrc-two">{{oneLineSongLrc}}</div>
+                        <div class="one-line" :class="{'one-line-fontSmall':oneLineSongLrc.length >=25}" v-show="ifOneLine">
+                            <div class="lrc-two" >{{oneLineSongLrc}}</div>
                         </div>
                     </div>
                     <Teleport to="body">
@@ -369,7 +369,7 @@ const 播放 = ()=>{
 onMounted(()=>{
     if(music.value)window.addEventListener('click',播放)
     //无歌词
-    if(musicList.value[playIndex.value].lrc.length <= 20 || Boolean(musicList.value[playIndex.value].ifScroll) == false){
+    if(musicList.value[playIndex.value].lrc.length <= 20 || useBoolean(musicList.value[playIndex.value].ifScroll) == false){
         ifOneLine.value = true
         oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
     }else{
@@ -378,26 +378,27 @@ onMounted(()=>{
         console.log(lrcArray.value);
         
         //有翻译
-        if(Boolean(musicList.value[playIndex.value].ifTranslate)){
+        if(useBoolean(musicList.value[playIndex.value].ifTranslate)){
             traArray.value = parseLyricLine(musicList.value[playIndex.value].translate)
             ifOneLine.value = false
         }else{
             ifOneLine.value = true
         }
     }
+    console.log(musicList.value);
     audioRef.value!.addEventListener('ended',  () => {
         playIndex.value++
         if(playIndex.value >= musicList.value.length)playIndex.value = 0
         url.value = musicList.value[playIndex.value].songUrl
            //无歌词或无滚动
-        if(musicList.value[playIndex.value].lrc.length <= 20 || Boolean(musicList.value[playIndex.value].ifScroll) == false){
+        if(musicList.value[playIndex.value].lrc.length <= 20 || useBoolean(musicList.value[playIndex.value].ifScroll) == false){
             ifOneLine.value = true
             oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
         }else{
             //有歌词
             lrcArray.value = parseLyricLine(musicList.value[playIndex.value].lrc)
             //有翻译
-            if(Boolean(musicList.value[playIndex.value].ifTranslate)){
+            if(useBoolean(musicList.value[playIndex.value].ifTranslate)){
                 traArray.value = parseLyricLine(musicList.value[playIndex.value].translate)
                 ifOneLine.value = false
             }else{
@@ -412,9 +413,8 @@ onMounted(()=>{
         AppPinia.songDuration = audioRef.value!.duration * 1000;
         let t = audioRef.value!.currentTime * 1000
         AppPinia.songTime = t
-        if(!(musicList.value[playIndex.value].lrc.length <= 20 || Boolean(musicList.value[playIndex.value].ifScroll) == false)){
-            //如果没有翻译
-            if(Boolean(musicList.value[playIndex.value].ifTranslate) == false){
+        if(!(musicList.value[playIndex.value].lrc.length <= 20 || useBoolean(musicList.value[playIndex.value].ifScroll) == false)){
+            if(useBoolean(musicList.value[playIndex.value].ifTranslate) == false){
                 for(let i = lrcArrayIndex;i<lrcArray.value.length;i++){
                     if(t >= lrcArray.value[i].time && t <= (lrcArray.value[i+1]?.time ?? Number.MAX_VALUE)){
                         if(lrcArray.value[i].lyric.length == 0 
@@ -688,6 +688,9 @@ watch(chagnePlay,()=>{
                     width: 100%;
                     display: flex;
                     justify-content: right;
+                }
+                .one-line-fontSmall{
+                    font-size: 16px;
                 }
             }
             @media (max-width:1265px) {

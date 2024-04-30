@@ -9,26 +9,49 @@
                     <el-carousel-item>
                         <img src="~~/assets/q2.jpg" alt="">
                     </el-carousel-item>
+                    <el-carousel-item>
+                        <img src="~~/assets/q3.jpg" alt="">
+                    </el-carousel-item>
+                    <el-carousel-item>
+                        <img src="~~/assets/q4.jpg" alt="">
+                    </el-carousel-item>
+                    <el-carousel-item>
+                        <img src="~~/assets/q5.jpg" alt="">
+                    </el-carousel-item>
                 </el-carousel>
             </div>
             <div class="right">
-                首页：如你所见<br>
-                文章：笔记与技术<br>
-                留言板：字面意思<br>
-                <!-- 实验室：demo<br> -->
-                十年：生活<br>
-                关于：字面意思<br>
+                <div class="to-top" v-for="(i,index) in topList" @click="goArticles(i.id)">
+                    <div class="ding">顶置</div>
+                    <div class="card-face front" :style="{backgroundImage:`url(${i.imgUrl})`}">{{ i.title }}</div>
+                    <div class="card-face back">{{ i.title2 }}</div>
+                </div>
+                <!-- <div class="to-top"></div> -->
             </div>
         </div>
         <div class="bottom">
             本站接入gravatar头像系统，只要提前在gravatar上设置头像并回复时填写email就可以显示头像。<br>
-            一个只会写音乐播放器的程序员。
+            一个可能没法成为程序员的人，个人介绍可以查看顶置文章。<br>
+            图一拍自2018年6月初中<br>
+            图二拍自2018年12月9日湘湖<br>
+            图三拍自2016年12月3日电影院《你的名字》<br>
+            图四拍自2023年4月15日第二十届icpc浙江省省赛<br>
+            图四拍自2018年6月17日
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ElCarousel, ElCarouselItem, ElImage } from 'element-plus';
+import { useRouter } from 'vue-router';
+const $router = useRouter()
+let topList = await useTopArticle()
+const goArticles = (id:number)=>{
+    $router.push({
+        path:`/articles/${id}`
+    })
+}
+
 </script>
 
 <style scoped lang="less">
@@ -61,6 +84,57 @@ import { ElCarousel, ElCarouselItem, ElImage } from 'element-plus';
             color: @font-color;
             line-height: 20px;
             letter-spacing:5px;
+            .to-top{
+                width: calc(100% - 20px);
+                height: calc(50% - 10px);
+                border-radius: .2em;
+                transition: transform 0.6s;
+                transform-style: preserve-3d;
+                user-select: none;
+                position: relative;
+                cursor: pointer;
+                .ding{
+                    position: absolute;
+                    z-index: 2;
+                    right: 0;
+                    top: 0;
+                    backface-visibility: hidden;
+                    transform: rotate(40deg) translateX(10px);
+                    font-weight: bold;
+                    color: black;
+                }
+                .card-face {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: .2em;
+                    position: absolute;
+                    backface-visibility: hidden;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 24px;
+                    font-weight: bold;
+                }
+                .front {
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    background-color: rgba(255, 255, 255, 0.5);
+                    background-blend-mode: screen; 
+                    color: black;
+                }
+                .back {
+                    color: @font-color;
+                    transform: rotateY(180deg);
+                    background-color:@background-color;
+                }
+            }
+            .to-top:hover{
+                transform: rotateY(180deg);
+            }
+            :first-child{
+                margin-bottom: 20px;
+            }
         }
     }
     .bottom{
@@ -68,6 +142,7 @@ import { ElCarousel, ElCarouselItem, ElImage } from 'element-plus';
         margin-top: 20px;
         color: @font-color;
         font-size: 18px;
+        line-height: 20px;
     }
 }
 @media (max-width:750px){

@@ -57,7 +57,10 @@ export const useApp = defineStore("app", {
   },
   actions: {
     async reqMusic():Promise<any>{
-      let result = await useSongList() 
+      let result:any[] = await useSongList() 
+      result.sort((a,b)=>{
+        return a.order - b.order
+      })
       this.musicList = result
   },
   },
