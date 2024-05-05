@@ -1,43 +1,45 @@
 <template>
     <div class="home">
-        <div class="top">
-            <div class="left rush">
-                <el-carousel trigger="click" height="300px" arrow="never" :interval="5000">
-                    <el-carousel-item>
-                        <img src="~~/assets/q1.jpg" alt="">
-                    </el-carousel-item>
-                    <el-carousel-item>
-                        <img src="~~/assets/q2.jpg" alt="">
-                    </el-carousel-item>
-                    <el-carousel-item>
-                        <img src="~~/assets/q3.jpg" alt="">
-                    </el-carousel-item>
-                    <el-carousel-item>
-                        <img src="~~/assets/q4.jpg" alt="">
-                    </el-carousel-item>
-                    <el-carousel-item>
-                        <img src="~~/assets/q5.jpg" alt="">
-                    </el-carousel-item>
-                </el-carousel>
-            </div>
-            <div class="right">
-                <div class="to-top" v-for="(i,index) in topList" @click="goArticles(i.id)">
-                    <div class="ding">顶置</div>
-                    <div class="card-face front" :style="{backgroundImage:`url(${i.imgUrl})`}">{{ i.title }}</div>
-                    <div class="card-face back">{{ i.title2 }}</div>
+        <el-scrollbar>
+            <div class="top">
+                <div class="left rush">
+                    <el-carousel trigger="click" height="300px" arrow="never" :interval="5000">
+                        <el-carousel-item>
+                            <img src="~~/assets/q1.jpg" alt="">
+                        </el-carousel-item>
+                        <el-carousel-item>
+                            <img src="~~/assets/q2.jpg" alt="">
+                        </el-carousel-item>
+                        <el-carousel-item>
+                            <img src="~~/assets/q3.jpg" alt="">
+                        </el-carousel-item>
+                        <el-carousel-item>
+                            <img src="~~/assets/q4.jpg" alt="">
+                        </el-carousel-item>
+                        <el-carousel-item>
+                            <img src="~~/assets/q5.jpg" alt="">
+                        </el-carousel-item>
+                    </el-carousel>
                 </div>
-                <!-- <div class="to-top"></div> -->
+                <div class="right">
+                    <div class="to-top" v-for="(i,index) in topList" @click="goArticles(i.id)">
+                        <div class="ding">顶置</div>
+                        <div class="card-face front" :style="{backgroundImage:`url(${i.imgUrl})`}">{{ i.title }}</div>
+                        <div class="card-face back">{{ i.title2 }}</div>
+                    </div>
+                    <!-- <div class="to-top"></div> -->
+                </div>
             </div>
-        </div>
-        <div class="bottom">
-            本站接入gravatar头像系统，只要提前在gravatar上设置头像并回复时填写email就可以显示头像。<br>
-            一个可能没法成为程序员的人，个人介绍可以查看顶置文章。<br>
-            图一拍自2018年6月初中<br>
-            图二拍自2018年12月9日湘湖<br>
-            图三拍自2016年12月3日电影院《你的名字》<br>
-            图四拍自2023年4月15日第二十届icpc浙江省省赛<br>
-            图四拍自2018年6月17日
-        </div>
+            <div class="bottom">
+                本站接入gravatar头像系统，只要提前在gravatar上设置头像并回复时填写email就可以显示头像。<br>
+                一个可能没法成为程序员的人，个人介绍可以查看顶置文章。<br>
+                图一拍自2018年6月初中<br>
+                图二拍自2018年12月9日湘湖<br>
+                图三拍自2016年12月3日电影院《你的名字》<br>
+                图四拍自2023年4月15日第二十届icpc浙江省省赛<br>
+                图五拍自2018年6月17日
+            </div>
+        </el-scrollbar>
     </div>
 </template>
 
@@ -153,8 +155,12 @@ const goArticles = (id:number)=>{
         width: calc(100% - 40px) !important;
     }
     .right{
-        width: 100% !important;
+        height: 200px !important;
+        width: calc(100% - 20px) !important;
         margin-top: 20px;
+    }
+    .bottom{
+        width: 90%;
     }
 }
 </style>
