@@ -1,7 +1,6 @@
 <template>
     <div class="article-list-item" v-lazy-directive @click="detail">
-        <el-image :src="ArticlesList.imgUrl" fit="cover">
-        </el-image>
+        <NuxtImg :src="ArticlesList.imgUrl" fit="cover" format="webp"></NuxtImg>
         <div class="txt">
             <div class="title" @click.stop>
                 {{ArticlesList.title}}
@@ -84,7 +83,7 @@ const detail = ()=>{
     align-items: center;
     overflow: hidden;
     cursor: pointer;
-    .el-image {
+    >img {
         border-radius: @border-ra;
         width: 35%;
         min-width: 35%;
@@ -172,7 +171,7 @@ const detail = ()=>{
         flex-direction: column;
         height: 420px;
     }
-    .article-list-item .el-image{
+    .article-list-item>img{
         width: 75%;
         height: 50%;
         margin-top:5%;

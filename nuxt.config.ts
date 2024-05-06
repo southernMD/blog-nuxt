@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     devServer:{
 
     },
+    
     build: {
         transpile: ['element-plus/es'],
     },
@@ -46,5 +47,5 @@ export default defineNuxtConfig({
             },
         }
     },
-    modules: ['@pinia/nuxt','@element-plus/nuxt','@pinia-plugin-persistedstate/nuxt'],
+    modules: ['@pinia/nuxt','@element-plus/nuxt','@pinia-plugin-persistedstate/nuxt', '@nuxt/image'],
 })

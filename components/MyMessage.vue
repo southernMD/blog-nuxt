@@ -1,10 +1,6 @@
 <template>
     <div class="MyMessage">
-        <el-image :src="AppPinia?.imgObj?.result?.[0]" style="width:300px; height: 200px;" fit="cover">
-            <template #placeholder>
-                <div></div>
-            </template>
-        </el-image>
+        <NuxtImg  format="webp" :src="AppPinia?.imgObj?.result?.[0]" height="200" width="300"></NuxtImg>
         <img class="header" draggable="false"
             src="https://gravatar.loli.net/avatar/e6b6cb8333565fd6cff15e3c8ba8ade1?s=80" alt="">
         <h1 class="name">南山有壶酒</h1>
@@ -86,10 +82,14 @@ if(!flag.value){
     height: 461px;
     order: 2;
 
-    >* {
+    >*:not(:first-child) {
         position: relative;
         z-index: 0;
         margin-top: 20px;
+    }
+    >img:first-child{
+        border-radius: .5em;
+        object-fit:cover;
     }
 }
 
@@ -103,7 +103,7 @@ if(!flag.value){
     }
 }
 
-img {
+.header {
     margin-top: -50px !important;
     user-select: none;
     height: 100px;
