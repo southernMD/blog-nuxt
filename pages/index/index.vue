@@ -5,7 +5,7 @@
                 <div class="left rush">
                     <el-carousel trigger="click" height="300px" arrow="never" :interval="5000">
                         <el-carousel-item v-for="i in 5">
-                            <img :src="`/q${i}.jpg`" alt="">
+                            <img :src="`/q${i}.webp`" alt="">
                         </el-carousel-item>
                     </el-carousel>
                 </div>
