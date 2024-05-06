@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.5",
+    "@vercel/speed-insights": "^1.0.10",
     "dayjs": "^1.11.6",
     "element-plus": "^2.2.21",
     "gravatar": "^1.8.2",
