@@ -4,20 +4,8 @@
             <div class="top">
                 <div class="left rush">
                     <el-carousel trigger="click" height="300px" arrow="never" :interval="5000">
-                        <el-carousel-item>
-                            <img src="~~/assets/q1.jpg" alt="">
-                        </el-carousel-item>
-                        <el-carousel-item>
-                            <img src="~~/assets/q2.jpg" alt="">
-                        </el-carousel-item>
-                        <el-carousel-item>
-                            <img src="~~/assets/q3.jpg" alt="">
-                        </el-carousel-item>
-                        <el-carousel-item>
-                            <img src="~~/assets/q4.jpg" alt="">
-                        </el-carousel-item>
-                        <el-carousel-item>
-                            <img src="~~/assets/q5.jpg" alt="">
+                        <el-carousel-item v-for="i in 5">
+                            <img :src="`/q${i}.jpg`" alt="">
                         </el-carousel-item>
                     </el-carousel>
                 </div>
