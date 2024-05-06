@@ -363,7 +363,6 @@ let lrcArrayIndex = 0;
 let traArrayIndex = 0;
 const 播放 = ()=>{
     audioRef.value?.play()
-    audioRef.value!.volume = 0.5
     window.removeEventListener('click',播放)
 }
 onMounted(()=>{
@@ -387,6 +386,8 @@ onMounted(()=>{
     }
     console.log(musicList.value);
     audioRef.value!.addEventListener('ended',  () => {
+        lrcArray.value = []
+        traArray.value = []
         playIndex.value++
         if(playIndex.value >= musicList.value.length)playIndex.value = 0
         url.value = musicList.value[playIndex.value].songUrl
