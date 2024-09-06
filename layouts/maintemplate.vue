@@ -343,9 +343,74 @@ const admit = () => {
     })
 }
 
+// function updateLyrics(){
+//     AppPinia.songDuration = audioRef.value!.duration * 1000;
+//     let t = audioRef.value!.currentTime * 1000
+//     AppPinia.songTime = t
+//     if(!(musicList.value[playIndex.value].lrc.length <= 5 || useBoolean(musicList.value[playIndex.value].ifScroll) == false)){
+//         if(useBoolean(musicList.value[playIndex.value].ifTranslate) == false){
+//             for(let i = lrcArrayIndex;i<lrcArray.value.length;i++){
+//                 if(t >= lrcArray.value[i].time && t <= (lrcArray.value[i+1]?.time ?? 999999999)){
+//                     if(lrcArray.value[i].lyric.length == 0 
+//                     && (lrcArray.value[i+1]?.time ?? 999999999 - lrcArray.value[i].time > 1000 * 10)){
+//                         ifOneLine.value = true
+//                         oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+//                     }else{
+//                         oneLineSongLrc.value =lrcArray.value[i].lyric
+//                     }
+//                     lrcArrayIndex = i
+//                     break
+//                 }
+//             }
+//         }else{
+//             ifOneLine.value = false
+//             for(let i = lrcArrayIndex;i<lrcArray.value.length;i++){
+//                 if(t >= lrcArray.value[i].time && t <= (lrcArray.value[i+1]?.time ?? 999999999)){
+//                     lrcArrayIndex = i
+//                     break
+//                 }
+//             }
+//             for(let i = traArrayIndex;i<traArray.value.length;i++){
+//                 if(t >= traArray.value[i].time && t <= (traArray.value[i+1]?.time ?? 999999999)){
+//                     traArrayIndex = i
+//                     break
+//                 }
+//             }
+//             if((lrcArray.value[lrcArrayIndex].lyric.length == 0 
+//             && (lrcArray.value[lrcArrayIndex+1]?.time ?? 999999999 - lrcArray.value[lrcArrayIndex].time > 1000 * 10))
+//             || (traArray.value[traArrayIndex].lyric.length == 0 
+//             && (traArray.value[traArrayIndex+1]?.time ?? 999999999 - traArray.value[traArrayIndex].time > 1000 * 10))
+//             ){
+//                 ifOneLine.value = true
+//                 oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+//             }else{
+//                 twoLineSongLrc.value = lrcArray.value[lrcArrayIndex].lyric
+//                 twoLineSongLrcTra.value = traArray.value[traArrayIndex].lyric
+//             }
+//         }
+//     }
+// }
+// function startLyricSync() {
+//         if (timer) return;
+//         timer = setInterval(() => {
+//             updateLyrics();
+//         }, 500); 
+//     }
+
+// function stopLyricSync() {
+//     clearInterval(timer);
+//     timer = null;
+// }
+
 const handleChangeMusic = ()=>{
-    if(music.value)audioRef.value?.pause()
-    else audioRef.value?.play()
+    if(music.value){
+        audioRef.value?.pause()
+        // stopLyricSync()
+    }
+    else {
+        audioRef.value?.play()
+        // startLyricSync()
+    }
     music.value = !music.value
 }
 const musicList = toRef(AppPinia,'musicList')
@@ -361,16 +426,25 @@ let lrcArray:Ref<{time: number;lyric: any}[]> = toRef(AppPinia,'lrcArray')
 let traArray:Ref<{time: number;lyric: any}[]> = toRef(AppPinia,'traArray')
 let lrcArrayIndex = 0;
 let traArrayIndex = 0;
+let lrc_state = 0
+
 const 播放 = ()=>{
     audioRef.value?.play()
     window.removeEventListener('click',播放)
 }
 onMounted(()=>{
-    if(music.value)window.addEventListener('click',播放)
+    if(music.value){
+        window.addEventListener('click',播放)
+        // startLyricSync()
+    }
+    
+    if(typeof musicList.value[playIndex.value] === "undefined")playIndex.value = 0
+    // 0 无歌词或无滚动 1 有歌词但没有滚动 2有歌词有滚动有翻译 3有歌词有滚动无翻译 
     //歌词长度小于20,显示歌曲名与歌手
     if(musicList.value[playIndex.value].lrc.length <= 5){
         ifOneLine.value = true
         oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+        lrc_state = 0
     }//有歌词但没有滚动
     else if(useBoolean(musicList.value[playIndex.value].ifScroll) == false){
         ifOneLine.value = true
@@ -378,6 +452,7 @@ onMounted(()=>{
         //@ts-ignore
         lrcArray.value = parseLyricNoTimeLine(JSON.stringify(musicList.value[playIndex.value].lrc))
         console.log(lrcArray.value);
+        lrc_state = 1
     }
     else{
         //无歌词或无滚动
@@ -388,10 +463,14 @@ onMounted(()=>{
         if(useBoolean(musicList.value[playIndex.value].ifTranslate)){
             traArray.value = parseLyricLine(musicList.value[playIndex.value].translate)
             ifOneLine.value = false
+            lrc_state = 2
         }else{
             ifOneLine.value = true
+            lrc_state = 3
         }
     }
+    ifOneLine.value = true
+    oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
     audioRef.value!.addEventListener('ended',  () => {
         lrcArray.value = []
         traArray.value = []
@@ -402,12 +481,14 @@ onMounted(()=>{
         if(musicList.value[playIndex.value].lrc.length <= 5){
             ifOneLine.value = true
             oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+            lrc_state = 0
         }//有歌词但没有滚动
         else if(useBoolean(musicList.value[playIndex.value].ifScroll) == false){
             ifOneLine.value = true
             oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
             //@ts-ignore
             lrcArray.value = parseLyricNoTimeLine(JSON.stringify(musicList.value[playIndex.value].lrc))
+            lrc_state = 1
         }
         else{
             //有歌词
@@ -416,69 +497,82 @@ onMounted(()=>{
             if(useBoolean(musicList.value[playIndex.value].ifTranslate)){
                 traArray.value = parseLyricLine(musicList.value[playIndex.value].translate)
                 ifOneLine.value = false
+                lrc_state = 2
             }else{
                 ifOneLine.value = true
+                lrc_state = 3
             }
         }
         lrcArrayIndex = 0;
         traArrayIndex = 0;
+        ifOneLine.value = true
+        oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+        console.log('ended');
+        // stopLyricSync()
     })
-    audioRef.value!.addEventListener('timeupdate',()=>{
-        //单位是s
-        AppPinia.songDuration = audioRef.value!.duration * 1000;
-        let t = audioRef.value!.currentTime * 1000
-        AppPinia.songTime = t
-        if(!(musicList.value[playIndex.value].lrc.length <= 5 || useBoolean(musicList.value[playIndex.value].ifScroll) == false)){
-            if(useBoolean(musicList.value[playIndex.value].ifTranslate) == false){
-                for(let i = lrcArrayIndex;i<lrcArray.value.length;i++){
-                    if(t >= lrcArray.value[i].time && t <= (lrcArray.value[i+1]?.time ?? Number.MAX_VALUE)){
-                        if(lrcArray.value[i].lyric.length == 0 
-                        && (lrcArray.value[i+1]?.time ?? Number.MAX_VALUE - lrcArray.value[i].time > 1000 * 10)){
-                            ifOneLine.value = true
-                            oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
-                        }else{
-                            oneLineSongLrc.value =lrcArray.value[i].lyric
-                        }
-                        lrcArrayIndex = i
-                        break
-                    }
-                }
-            }else{
-                ifOneLine.value = false
-                for(let i = lrcArrayIndex;i<lrcArray.value.length;i++){
-                    if(t >= lrcArray.value[i].time && t <= (lrcArray.value[i+1]?.time ?? Number.MAX_VALUE)){
-                        lrcArrayIndex = i
-                        break
-                    }
-                }
-                for(let i = traArrayIndex;i<traArray.value.length;i++){
-                    if(t >= traArray.value[i].time && t <= (traArray.value[i+1]?.time ?? Number.MAX_VALUE)){
-                        traArrayIndex = i
-                        break
-                    }
-                }
-                if((lrcArray.value[lrcArrayIndex].lyric.length == 0 
-                && (lrcArray.value[lrcArrayIndex+1]?.time ?? Number.MAX_VALUE - lrcArray.value[lrcArrayIndex].time > 1000 * 10))
-                || (traArray.value[traArrayIndex].lyric.length == 0 
-                && (traArray.value[traArrayIndex+1]?.time ?? Number.MAX_VALUE - traArray.value[traArrayIndex].time > 1000 * 10))
-                ){
-                    ifOneLine.value = true
-                    oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
-                }else{
-                    twoLineSongLrc.value = lrcArray.value[lrcArrayIndex].lyric
-                    twoLineSongLrcTra.value = traArray.value[traArrayIndex].lyric
-                }
-            }
-        }
-    })
+    // audioRef.value!.addEventListener('timeupdate',()=>{
+    //     if(timer!)startLyricSync()
+    // })
+    // audioRef.value!.addEventListener('timeupdate',()=>{
+    //     //单位是s
+    //     AppPinia.songDuration = audioRef.value!.duration * 1000;
+    //     let t = audioRef.value!.currentTime * 1000
+    //     AppPinia.songTime = t
+    //     // if(!(musicList.value[playIndex.value].lrc.length <= 5 || useBoolean(musicList.value[playIndex.value].ifScroll) == false)){
+    //     // const lrcArrayLength = lrcArray.value.length
+    //     // const lrcArrayNoVue = lrcArray.value
+    //     // const traArrayNoVue = traArray.value
+    //     // if(!(lrc_state == 0 || lrc_state == 1)){
+    //     //     if(lrc_state == 1){
+    //     //         for(let i = lrcArrayIndex;i<lrcArrayLength;i++){
+    //     //             if(t >= lrcArrayNoVue[i].time && t <= (lrcArrayNoVue[i+1]?.time ?? 999999999)){
+    //     //                 if(lrcArrayNoVue[i].lyric.length == 0 
+    //     //                 && (lrcArrayNoVue[i+1]?.time ?? 999999999 - lrcArrayNoVue[i].time > 1000 * 10)){
+    //     //                     ifOneLine.value = true
+    //     //                     oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+    //     //                 }else{
+    //     //                     oneLineSongLrc.value =lrcArrayNoVue[i].lyric
+    //     //                 }
+    //     //                 lrcArrayIndex = i
+    //     //                 break
+    //     //             }
+    //     //         }
+    //     //     }else{
+    //     //         ifOneLine.value = false
+    //     //         for(let i = lrcArrayIndex;i<lrcArrayLength;i++){
+    //     //             if(t >= lrcArrayNoVue[i].time && t <= (lrcArrayNoVue[i+1]?.time ?? 999999999)){
+    //     //                 lrcArrayIndex = i
+    //     //                 break
+    //     //             }
+    //     //         }
+    //     //         for(let i = traArrayIndex;i<traArrayNoVue.length;i++){
+    //     //             if(t >= traArrayNoVue[i].time && t <= (traArrayNoVue[i+1]?.time ?? 999999999)){
+    //     //                 traArrayIndex = i
+    //     //                 break
+    //     //             }
+    //     //         }
+    //     //         if((lrcArray.value[lrcArrayIndex].lyric.length == 0 
+    //     //         && (lrcArray.value[lrcArrayIndex+1]?.time ?? 999999999 - lrcArray.value[lrcArrayIndex].time > 1000 * 10))
+    //     //         || (traArray.value[traArrayIndex].lyric.length == 0 
+    //     //         && (traArray.value[traArrayIndex+1]?.time ?? 999999999 - traArray.value[traArrayIndex].time > 1000 * 10))
+    //     //         ){
+    //     //             ifOneLine.value = true
+    //     //             oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+    //     //         }else{
+    //     //             twoLineSongLrc.value = lrcArray.value[lrcArrayIndex].lyric
+    //     //             twoLineSongLrcTra.value = traArray.value[traArrayIndex].lyric
+    //     //         }
+    //     //     }
+    //     // }
+    // })
     audioRef.value!.addEventListener('play',()=>{
-        console.log('play');
         music.value = true
+        // startLyricSync()
     })
 })
 watch(musicList,()=>{
+    if(typeof musicList.value[playIndex.value] === "undefined")playIndex.value = 0
     url.value = musicList.value[playIndex.value].songUrl
-
 },{immediate:true})
 const next = toRef(AppPinia,'next')
 const chagnePlay = toRef(AppPinia,'chagnePlay')
@@ -496,12 +590,14 @@ watch(next,()=>{
     if(musicList.value[playIndex.value].lrc.length <= 5){
         ifOneLine.value = true
         oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+        lrc_state = 0
     }//有歌词但没有滚动
     else if(useBoolean(musicList.value[playIndex.value].ifScroll) == false){
         ifOneLine.value = true
         oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
         //@ts-ignore
         lrcArray.value = parseLyricNoTimeLine(JSON.stringify(musicList.value[playIndex.value].lrc))
+        lrc_state = 1
     }
     else{
         //有歌词
@@ -510,8 +606,10 @@ watch(next,()=>{
         if(useBoolean(musicList.value[playIndex.value].ifTranslate)){
             traArray.value = parseLyricLine(musicList.value[playIndex.value].translate)
             ifOneLine.value = false
+            lrc_state = 2
         }else{
             ifOneLine.value = true
+            lrc_state = 3
         }
     }
     lrcArrayIndex = 0;
