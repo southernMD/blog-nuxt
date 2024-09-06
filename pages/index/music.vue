@@ -17,18 +17,18 @@
         <div class="ar-al">{{ musicList[playIndex].ar }}-{{ musicList[playIndex].al }}</div>
         <el-scrollbar>
           <div class="lrc">
-            <div class="two-line" v-if="traArray.length!=0">
+            <div class="two-line">
               <div class="team" v-for="(item, index) in (lrcArray)" >
                 <!-- :class="{
                 active:AppPinia.songTime >= lrcArray[index].time && AppPinia.songTime <= (lrcArray[index+1]?.time ?? Number.MAX_VALUE)
                 }" -->
                 <div class="lrc-one" >{{ lrcArray[index].lyric }}</div>
-                <div class="lrc-translate">{{ getLrc(index) }}</div>
+                <div class="lrc-translate" v-if="useBoolean(musicList[playIndex].ifTranslate)">{{ getLrc(index) }}</div>
               </div>
             </div>
-            <div class="one-line" v-if="traArray.length==0">
+            <!-- <div class="one-line" v-if="traArray.length==0">
               <div class="lrc-two"></div>
-            </div>
+            </div> -->
           </div>
         </el-scrollbar>
 
@@ -39,9 +39,9 @@
         <i class="iconfont icon-gf-play" v-if="!AppPinia.music" ></i>
         <i class="iconfont icon-zanting" v-else></i>
       </div>
-      <!-- <div class="next" @click="next">
+      <div class="next" @click="next">
         <i class="iconfont icon-xiayishou" ></i>
-      </div> -->
+      </div>
       <div class="moveing-line">
         <div class="color-line" :style="{width:colorRight + '%'}">
           <div class="ball"></div>
@@ -98,7 +98,7 @@ const getLrc = (index: number) => {
 }
 const colorRight = ref(0)
 watch(songTime,()=>{
-  console.log(songTime.value,AppPinia.songDuration);
+  // console.log(songTime.value,AppPinia.songDuration);
   
   colorRight.value = isNaN(songTime.value / AppPinia.songDuration * 100) ? 0:songTime.value / AppPinia.songDuration * 100
 },{immediate:true})
@@ -215,18 +215,20 @@ const chagnePlay = ()=>{
       border-radius: 2em;
       background-color: @background-btn;
       color: @font-color;
-      margin-right: 10px;
+      margin-right:10px  ;
+      cursor: pointer;
     }
     .next{
-      width: 25px;
-      height: 25px;
+      width: 30px;
+      height: 30px;
       display: flex;
       justify-content: center;
       align-items: center;
       border-radius: 2em;
       background-color: @background-btn;
       color: @font-color;
-      margin: 0 10px  ;
+      margin-right:20px  ;
+      cursor: pointer;
     }
     .moveing-line{
       width: calc(100% - 80px);

@@ -36,3 +36,28 @@ export const parseLyricLine = (str: string = ''): Array<T> => {
     }
 
 }
+
+function trimCharacter(str:string, char:string) {
+    const regex = new RegExp(`^${char}+|${char}+$`, 'g');
+    return str.replace(regex, '');
+}
+
+
+export const parseLyricNoTimeLine = (str: string = ''): Array<{
+    lyric: any
+}> => {
+    if (str != '') {
+        const result = trimCharacter(str, '\\"');
+        //@ts-ignore
+        return result.split("\\n").filter((value) => {
+            return value.trim() !== "";
+        })
+        .map((value):{'lyric':string} => {
+            return {lyric:value}
+        })
+    } else {
+        return []
+    }
+
+}
+

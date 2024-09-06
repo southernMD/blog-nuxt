@@ -367,11 +367,19 @@ const 播放 = ()=>{
 }
 onMounted(()=>{
     if(music.value)window.addEventListener('click',播放)
-    //无歌词
-    if(musicList.value[playIndex.value].lrc.length <= 20 || useBoolean(musicList.value[playIndex.value].ifScroll) == false){
+    //歌词长度小于20,显示歌曲名与歌手
+    if(musicList.value[playIndex.value].lrc.length <= 5){
         ifOneLine.value = true
         oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
-    }else{
+    }//有歌词但没有滚动
+    else if(useBoolean(musicList.value[playIndex.value].ifScroll) == false){
+        ifOneLine.value = true
+        oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+        //@ts-ignore
+        lrcArray.value = parseLyricNoTimeLine(JSON.stringify(musicList.value[playIndex.value].lrc))
+        console.log(lrcArray.value);
+    }
+    else{
         //无歌词或无滚动
         lrcArray.value = parseLyricLine(musicList.value[playIndex.value].lrc)
         console.log(lrcArray.value);
@@ -384,7 +392,6 @@ onMounted(()=>{
             ifOneLine.value = true
         }
     }
-    console.log(musicList.value);
     audioRef.value!.addEventListener('ended',  () => {
         lrcArray.value = []
         traArray.value = []
@@ -392,10 +399,17 @@ onMounted(()=>{
         if(playIndex.value >= musicList.value.length)playIndex.value = 0
         url.value = musicList.value[playIndex.value].songUrl
            //无歌词或无滚动
-        if(musicList.value[playIndex.value].lrc.length <= 20 || useBoolean(musicList.value[playIndex.value].ifScroll) == false){
+        if(musicList.value[playIndex.value].lrc.length <= 5){
             ifOneLine.value = true
             oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
-        }else{
+        }//有歌词但没有滚动
+        else if(useBoolean(musicList.value[playIndex.value].ifScroll) == false){
+            ifOneLine.value = true
+            oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+            //@ts-ignore
+            lrcArray.value = parseLyricNoTimeLine(JSON.stringify(musicList.value[playIndex.value].lrc))
+        }
+        else{
             //有歌词
             lrcArray.value = parseLyricLine(musicList.value[playIndex.value].lrc)
             //有翻译
@@ -414,7 +428,7 @@ onMounted(()=>{
         AppPinia.songDuration = audioRef.value!.duration * 1000;
         let t = audioRef.value!.currentTime * 1000
         AppPinia.songTime = t
-        if(!(musicList.value[playIndex.value].lrc.length <= 20 || useBoolean(musicList.value[playIndex.value].ifScroll) == false)){
+        if(!(musicList.value[playIndex.value].lrc.length <= 5 || useBoolean(musicList.value[playIndex.value].ifScroll) == false)){
             if(useBoolean(musicList.value[playIndex.value].ifTranslate) == false){
                 for(let i = lrcArrayIndex;i<lrcArray.value.length;i++){
                     if(t >= lrcArray.value[i].time && t <= (lrcArray.value[i+1]?.time ?? Number.MAX_VALUE)){
@@ -466,34 +480,44 @@ watch(musicList,()=>{
     url.value = musicList.value[playIndex.value].songUrl
 
 },{immediate:true})
-const next = toRef(AppPinia,'twoLineSongLrcTra')
+const next = toRef(AppPinia,'next')
 const chagnePlay = toRef(AppPinia,'chagnePlay')
 watch(chagnePlay,()=>{
     handleChangeMusic()
 })
-// watch(next,()=>{
-//     console.log('wokandaole ');
-//     playIndex.value++
-//     if(playIndex.value >= musicList.value.length)playIndex.value = 0
-//     url.value = musicList.value[playIndex.value].songUrl
-//         //无歌词或无滚动
-//     if(musicList.value[playIndex.value].lrc.length <= 20 || Boolean(musicList.value[playIndex.value].ifScroll) == false){
-//         ifOneLine.value = true
-//         oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
-//     }else{
-//         //有歌词
-//         lrcArray.value = parseLyricLine(musicList.value[playIndex.value].lrc)
-//         //有翻译
-//         if(Boolean(musicList.value[playIndex.value].ifTranslate)){
-//             traArray.value = parseLyricLine(musicList.value[playIndex.value].translate)
-//             ifOneLine.value = false
-//         }else{
-//             ifOneLine.value = true
-//         }
-//     }
-//     lrcArrayIndex = 0;
-//     traArrayIndex = 0;
-// })
+watch(next,()=>{
+    console.log('wokandaole ');
+    playIndex.value++
+    if(playIndex.value >= musicList.value.length)playIndex.value = 0
+    lrcArray.value = []
+    traArray.value = []
+    url.value = musicList.value[playIndex.value].songUrl
+        //无歌词或无滚动
+    if(musicList.value[playIndex.value].lrc.length <= 5){
+        ifOneLine.value = true
+        oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+    }//有歌词但没有滚动
+    else if(useBoolean(musicList.value[playIndex.value].ifScroll) == false){
+        ifOneLine.value = true
+        oneLineSongLrc.value = `${musicList.value[playIndex.value].name}-${musicList.value[playIndex.value].ar}`
+        //@ts-ignore
+        lrcArray.value = parseLyricNoTimeLine(JSON.stringify(musicList.value[playIndex.value].lrc))
+    }
+    else{
+        //有歌词
+        lrcArray.value = parseLyricLine(musicList.value[playIndex.value].lrc)
+        //有翻译
+        if(useBoolean(musicList.value[playIndex.value].ifTranslate)){
+            traArray.value = parseLyricLine(musicList.value[playIndex.value].translate)
+            ifOneLine.value = false
+        }else{
+            ifOneLine.value = true
+        }
+    }
+    lrcArrayIndex = 0;
+    traArrayIndex = 0;
+})
+
 </script>
 
 <style scoped lang="less">
